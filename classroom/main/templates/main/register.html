@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Register</h1>
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                    <small>
+                        <a href="{% url 'main:login' %}">Login</a>
+                    </small>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

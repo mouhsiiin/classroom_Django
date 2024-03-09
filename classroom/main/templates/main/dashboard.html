@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Classroom
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Classroom</h1>
+                <a href="create.php" class="btn btn-primary">Create</a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Classroom</th>
+                            <th>Capacity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for classroom in classrooms %}
+                        <tr>
+                            <td>{{ classroom.id }}</td>
+                            <td>{{ classroom.name }}</td>
+                            <td>{{ classroom.capacity }}</td>
+                            <td>
+                                <a href="edit.php?id={{ classroom.id }}" class="btn btn-warning">Edit</a>
+                                <a href="delete.php?id={{ classroom.id }}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

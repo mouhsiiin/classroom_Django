@@ -1,0 +1,30 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+    Create Classroom
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Create Classroom</h1>
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="name">Classroom</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                   
+                    <!-- csv file for studets emails -->
+                    <div class="form-group">
+                        <label for="students">Students</label>
+                        <input type="file" class="form-control" id="students" name="students" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
