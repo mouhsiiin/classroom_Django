@@ -1,1 +1,1 @@
-# calssroom_Django
+# Django classroom
