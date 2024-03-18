@@ -1,0 +1,908 @@
+*, *::before, *::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    text-decoration: none;
+    list-style: none;
+    border: none;    
+}
+:root{
+    --primary-color-hue: 252;  
+    --color-dark-light-theme: 15%;
+    --color-light-light-theme: 92%;
+    --color-white-light-theme: 100%;
+
+    --color-white: hsl(0, 0%, var(--color-white-light-theme));
+    --color-light: hsl(252, 30%, var(--color-light-light-theme));
+    --color-gray: hsl(252, 15%, 60%);
+    --color-primary: hsl(var(--primary-color-hue), 75%, 60%); 
+    --color-secondary: hsl(252, 100%, 90%);
+    --color-success: hsl(120, 95%, 60%);
+    --color-danger: hsl(0, 95%, 60%);
+    --color-dark: hsl(252, 30%, var(--color-dark-light-theme));
+    --color-black: hsl(252, 30%, 8%);
+
+
+    --border-radius: 2rem;
+    --card-border-radius: 1rem;
+
+    --btn-padding: .6rem 2rem;
+
+    --search-padding: .6rem 1rem;
+    --card-padding: 1rem;
+}
+
+body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--color-dark);
+    background: var(--color-light);
+    /* overflow: hidden;       */
+    font-size: 16px;  
+}
+
+/* ..............Custom Style............. */
+.container{
+    width: 90%;
+    margin: 0 auto;
+}
+
+img{
+    display: block;
+    width: 100%;
+}
+
+.profile-picture{
+    width: 2.9rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.profile-picture:hover{
+    opacity: 0.75;
+}
+
+.btn{
+    padding: var(--btn-padding);
+    display: inline-block;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: 300ms ease all;
+    color: white !important;
+}
+.btn:hover{
+    opacity: 0.75;
+}
+.btn-primary{
+    background: var(--color-primary);
+ 
+}
+
+.text-bold{
+    font-weight: 500;
+}
+.text-gry{
+    color: var(--color-gray);
+}
+
+/* .................Start NavBar.................. */
+nav{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    padding: .7rem 0;
+    background: var(--color-white);
+}
+.nav-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav .serch-bar{
+    padding: var(--search-padding);
+    background: var(--color-light);
+    border-radius: var(--border-radius);
+}
+nav .serch-bar input[type="search"]{
+    background: transparent;
+    width: 30vw;
+    margin-left: 1rem;
+    font-size: .9rem;
+    color: var(--color-dark);
+}
+nav .serch-bar input[type="search"]::placeholder{
+    color: var(--color-gray);
+}
+.add-post{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.logo h3{
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    user-select: none;  
+    color: var(--color-dark);  
+}
+.logo span{
+    color: var(--color-primary);
+}
+/* .................End NavBar.................. */
+
+
+
+/* .................Start Main Section.................. */
+main{
+    position: relative;
+    top: 6rem;    
+}
+.main-container{
+    display: grid;
+    grid-template-columns: 18vw auto 20vw;
+    position: relative;    
+}
+
+/* ............Start Main Left........... */
+.main-left{
+    position: sticky;
+    height: max-content;
+    top: 5.4rem;
+  
+}
+.main-left .profile{
+    background: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    width: 100%;
+    gap: 1rem;
+    display: flex;
+}
+
+aside{
+    margin-top: 1rem;
+    border-radius:var(--card-border-radius) ;
+   
+}
+aside .menu-item{
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    position: relative;
+    cursor: pointer;
+    transition: 300ms ease all;
+    background: var(--color-white);  
+}
+aside .menu-item:hover{
+    background: var(--color-light);
+}
+aside .menu-item span img{
+    width: 1.7rem;
+    margin-left: 2rem;
+    position: relative;     
+}
+aside .notfy-counter{
+    background: var(--color-danger);
+    color: var(--color-white);
+    width: fit-content;
+    font-size: .7rem;
+    border-radius: 30%;
+    padding: .1rem .4rem; 
+    position: absolute;  
+    top: .7rem;
+    left: 3.1rem;
+}
+.nt{
+    left: 3rem !important;  
+}
+aside .menu-item h3{
+    margin-left: 1.5rem;
+    font-size: 1rem;    
+}
+aside .active{
+    background: var(--color-light);
+}
+aside .active h3{
+    color: var(--color-primary);
+}
+aside .active::before{
+    content: '';
+    display: block;
+    width: .5rem;
+    height: 100%;
+    background: var(--color-primary);
+}
+aside .menu-item:first-child{
+    overflow: hidden;
+    border-top-left-radius: var(--card-border-radius);
+    border-top-right-radius: var(--card-border-radius);
+}
+aside .menu-item:nth-last-child(2){
+    overflow: hidden;
+    border-bottom-left-radius: var(--card-border-radius);    
+    border-bottom-right-radius: var(--card-border-radius);    
+}
+.btn-lg{
+    padding: 1rem 0;
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+
+/* ............Start Notifaction Box........... */
+.notification-box{
+    width: 30rem;
+    left: 110%;
+    position: absolute;
+    top: 0;
+    background: var(--color-white);
+    border-radius: var(--card-border-radius);
+    padding: var(--card-padding);
+    box-shadow: var(--color-primary) 0 0 .4rem;
+    z-index: 8;
+    display: none; 
+}
+.notification-box::before{
+    content: '';
+    width: 1.2rem;
+    height: 1.2rem;
+    background: var(--color-white);
+    position: absolute;
+    left: -.6rem;
+    transform: rotate(45deg);
+}
+.notification-box>div{
+    display: flex;
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+.notification-box .profile-picture{
+    width: 2.6rem;
+}
+.notification-box>div small{
+    display: block;
+}
+/* ............End Notifaction Box........... */
+
+
+
+/* ............End Main Left........... */
+
+
+/* ................Start Main Medle............... */
+
+/* ...........Stories start............ */
+.middle-container{
+    max-width: 700px !important;
+    width: 90%;
+    margin: 0 auto;    
+}
+.stories-wrappper{
+    display: flex;
+    gap: .5rem; 
+    height: 12rem !important;   
+}
+.stories-wrappper .story{
+    width: 100%;
+    height: 100%;
+    position: relative;  
+    border-radius: var(--card-border-radius);  
+    overflow: hidden;    
+}
+.story input{
+    display: none;  
+}
+.story::before{
+    height: 5rem;
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    background: linear-gradient(transparent,var(--color-primary));
+    width: 100%;
+    
+}
+.stories-wrappper .story:first-child{
+    background: var(--color-primary);
+}
+.story .profile-picture{
+    position: absolute;
+    top: .6rem;
+    left: 0.2rem;
+    width: 2.4rem;
+    border: 2px dashed var(--color-primary);
+    z-index: 8;
+}
+.story p{
+    text-align: center;
+    margin-top: -3rem;  
+    color: white;  
+    z-index: 8;
+    position: absolute;
+    width: 100%;
+    font-size: .9rem;
+    letter-spacing: .4px;
+}
+.story>img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.story .add-story{
+    display: flex;
+    flex-direction: column;   
+    width: 100%;
+    height: 100%;
+    background: var(--color-primary);
+    top: 0;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    text-align: center;      
+}
+
+.story .add-story i{
+    display: block;
+    font-size: 1.4rem;
+    margin-top: -1rem;
+    color: var(--color-white);
+}
+.story .add-story p{
+    margin-bottom: -7rem;
+}
+/* ...........Stories end............ */
+
+.main-middle .add-post{
+    display: flex;  
+    justify-content: space-between;
+    align-items: center;
+    padding: .4rem var(--card-padding);  
+    border-radius: var(--border-radius);
+    background: var(--color-white);
+    margin-top: 1rem;    
+}
+.main-middle .add-post input[type="text"]{
+    justify-self: start;
+    width: 100%;
+    padding-left:1rem ;
+    background: transparent;
+    color: var(--color-dark);
+    margin-right: 1rem;
+}
+.main-middle .add-post .profile-picture{
+    width: 2.8rem;
+}
+
+/* ............Start Feed Aria.......... */
+.feeds .feed{
+    background: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    margin: 1rem auto;
+    line-height: 1.5;
+    font-size: .85rem;   
+
+}
+.feeds .feed .feed-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+}
+.myfeed .feed-top .edit{
+     position: relative;  
+}
+.feed .feed-top .user{
+    display: flex;
+    gap: 1rem;
+}
+.feed .feed-top .edit img{
+    width: 1.7rem;
+}
+
+.feed .feed-img{
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+    margin: .8rem 0;
+}
+.feed .action-button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.4rem;  
+    margin: 0.6rem;  
+}
+
+.action-button span:first-child i{
+    font-weight: normal;
+}
+.action-button span:nth-child(2) i{
+    font-weight: normal;
+}
+.bookmark i{
+    font-weight: normal;
+}
+.liked-by{
+    display: flex;
+}
+.liked-by span{
+    border-radius: 50%;
+    display: block;
+    height: 1.4rem;
+    width: 1.4rem;
+    overflow: hidden;
+    margin-left: -.6rem;
+    border: 2px solid var(--color-white);
+}
+.liked-by span:first-child{
+    margin: 0;
+}
+.liked-by p{
+    margin-left: .5rem;
+}
+.hars-tag{
+    color: var(--color-primary);
+}
+.edit .edit-menu{
+    background: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);  
+    display: flex;
+    flex-direction: column; 
+    gap: 1rem;
+    position: absolute;
+    right: 0;
+    box-shadow: 0 0 .2rem var(--color-primary);
+    top: 2.4rem; 
+    transform: scale(0);
+    transition: 300ms all ease;  
+    transform-origin:top right ;
+}
+.edit:hover .edit-menu{
+    transform: scale(1); 
+}
+
+.edit .edit-menu li{
+    display: flex;
+    gap: .7rem;
+    align-items: center;
+    font-size: 1rem;
+    color: var(--color-gray);
+    transition: 300ms ease all;   
+}
+.edit .edit-menu li:hover{
+    color: var(--color-dark);
+}
+.edit .edit-menu li:last-child:hover{
+    color: var(--color-danger);
+}
+/* ............End Feed Aria........... */
+
+/* ...............End Main Medle............... */
+
+
+/* ...............Start Main Right............... */
+.main-right{
+    height: max-content;
+    position: sticky;
+    top: -18rem;  
+    bottom: 0;  
+}
+
+/*............ Start Message.......... */
+.messages{
+    background: var(--color-white);
+    border-radius: var(--card-border-radius);
+    padding: var(--card-padding);
+}
+.message-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.messages i{
+    font-size: 1.4rem;
+}
+.messge-serch-bar{
+    display: flex;
+    background: var(--color-light);
+    border-radius: var(--border-radius);
+    padding: var(--search-padding);
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+.messge-serch-bar input[type="search"]{
+    background: transparent;
+    font-size: .9rem;
+    color: var(--color-dark);   
+}
+.message-categories{
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    align-items: center;    
+}
+.message-categories h6{
+    font-weight: bold;
+    width: 100%;
+    font-size: .85rem;
+    padding-bottom: .5rem;
+    border-bottom: 4px solid var(--color-light);
+    text-align: center;
+    
+}
+.message-categories .active{
+    border-color: var(--color-primary);
+}
+.message{
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: start;
+}
+.message:last-child{
+    margin-bottom: 0;
+}
+.message p{
+    font-size: .8rem;
+}
+.message .profile-picture{
+    position: relative;
+    overflow: visible;  
+    height: 2.6rem;
+    width: 2.6rem;
+}.message .profile-picture img{
+    border-radius: 50%;
+    height: 100%;
+    width: 100%; 
+    object-fit: cover;  
+}
+.green-active{
+    width: .8rem;
+    height: .8rem;
+    background: var(--color-success);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.message-request{
+    color: var(--color-primary);
+}
+/*............ End Message.......... */
+
+
+/*............ Start Firend Request.......... */
+.firend-rquest{
+    margin-top: 1rem;
+}
+.firend-rquest h4{
+    color: var(--color-gray);
+    margin: 1rem 0;
+}
+.request{
+    background-color: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    margin-bottom: 1rem;
+}
+.request .profile-picture{
+    height: fit-content;
+}
+.alert{
+    display: none;
+    margin-top: 1rem   ;
+    margin-left: -1.5rem;
+    
+}
+.request .info{
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.request .action{
+    display: flex;
+    gap: 1rem;
+}
+.request .action .btn-danger{
+    background: var(--color-danger);
+    color: var(--color-white);
+}
+/*............ End Firend Request.......... */
+/* ...............End Main Right............... */
+
+/* .................End Main Section.................. */
+
+
+
+
+
+
+
+
+
+
+
+/* .................Start Popup Aria ................. */
+
+/* .............Start Profile Popup............. */
+.popup{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    justify-content: center;
+    z-index: 9;
+    background: #000000ba; 
+    display: none;  
+    padding-top: 4rem;  
+}
+.popup>div{
+    display: flex;
+}
+.popup-box{
+    width: fit-content;   
+    height: max-content;
+    background: var(--color-white);
+    padding: 3rem; 
+    border-radius: var(--card-border-radius);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;  
+    box-shadow: var(--color-primary) 0 0 .3rem;
+}
+.profile-popup-box{
+    width: 400px;
+}
+.profile-popup-box>div{
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+    overflow: hidden;   
+    margin-top: 2rem; 
+}
+#profile-upload{
+    display: none;
+}
+.profile-popup-box h1{
+    line-height: 1.8;
+}
+.popup .close{
+    font-size: 1.6rem;
+    color: var(--color-gray);
+    margin-left: .5rem;  
+    margin-top: -.5rem; 
+}
+
+/*.............. End Profile popup.............. */
+
+
+/*.............. Start Add post popup.............. */
+.add-post-pop{
+    gap: 1rem;  
+}
+.post-title{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.post-title label{
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+.post-title input{
+    background: var(--color-light);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);  
+    font-size: 1.1rem;  
+}
+.post-title input:focus{
+    border: 1px solid var(--color-gray);
+}
+.post-img{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.post-img input[type='file']{
+    display: none;
+}
+.post-img img{
+    width: 6rem;
+    margin: auto; 
+    
+}
+.post-img .feed-upload-button{
+    padding: var(--card-padding);
+    border: 2px dashed var(--color-dark);
+    font-weight: bold;      
+}
+/*.............. End Add post popup.............. */
+
+
+/*.............. Start Theme Customize popup.............. */
+
+.theme-customize-popup-box .font-size{
+    margin-top: 3rem;
+}
+.theme-customize-popup-box h1{
+    margin-bottom: .5rem;
+}
+.theme-customize-popup-box .font-size>div{
+    display: flex;
+    padding: var(--search-padding);
+    border-radius: var(--card-border-radius);
+    justify-content: space-between;
+    align-items: center;
+    background: var(--color-light);
+    margin: 1rem 0;   
+}
+.choose-size{
+    height: .3rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: var(--color-secondary);
+    align-items: center;
+    margin: 0 1rem;
+    gap: 4rem;    
+}
+.choose-size span{
+    width: 1rem;
+    height: 1rem;
+    background: var(--color-secondary);
+    cursor: pointer;
+    border-radius: 50%;
+}
+.choose-size .active{
+    background: var(--color-primary);
+}
+/* ........Color......... */
+.choose-color{
+    margin: 1rem 0;
+    justify-content: space-between;
+    border-radius: var(--card-border-radius);
+    padding: var(--search-padding);
+    justify-content: space-between;
+    background: var(--color-light);
+    align-items: center;     
+}
+.choose-color span{
+    height: 2.2rem;
+    width: 2.2rem;
+    border-radius: 50%;  
+    display: inline-block;
+    margin: 0 .5rem;    
+}
+.choose-color .active{
+    border: 4px solid var(--color-dark);
+}
+.choose-color span:nth-child(1){
+    background: hsl(252, 75%, 60%);
+}
+.choose-color span:nth-child(2){
+    background: hsl(52, 75%, 60%);
+}
+.choose-color span:nth-child(3){
+    background: hsl(352, 75%, 60%);
+}
+.choose-color span:nth-child(4){
+    background: hsl(152, 75%, 60%);
+}
+.choose-color span:nth-child(5){
+    background: hsl(202, 75%, 60%);
+}
+/* ........Background......... */
+.choose-bg{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+.choose-bg>div{
+    display: flex;
+    width: 100%;
+    padding: var(--card-padding);
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: .4rem;
+    cursor: pointer;
+}
+.choose-bg .active{
+    border: 2px solid var(--color-primary);
+}
+.choose-bg .bg1{
+    background: white;
+    box-shadow: 0 0 .3rem rgba(0, 0, 0, 0.3);
+    color: black;
+}
+.choose-bg .bg2{
+    color: white;
+    background: hsl(252, 30%, 17%);
+}
+.choose-bg>div span{
+    height: 1.4rem;
+    width: 1.4rem;
+    border-radius: 50%;
+    border:2px solid var(--color-gray);
+    margin-right: .4rem;
+}
+/*.............. End Theme Customize popup.............. */
+
+/* .................End Popup Aria.................. */
+
+
+/* ...........Java Script Other Classes............ */
+.boxshadow1{
+    box-shadow: 0 0 .5rem var(--color-primary);
+}
+
+.liked{
+    font-weight: bold !important;
+    color: var(--color-danger);
+    transform: scale(1.2);
+}
+.icon-bg{
+    background: var(--color-dark);
+    padding: .2rem;
+    border-radius: .2rem;
+}
+
+/* ====================Start Media Queryes======================= */
+/* .........MAX WIDTH(1200PX)..... */
+@media (max-width:1200px) {
+    .container{
+        width: 96%;
+    }   
+    .main-container{
+        grid-template-columns:6rem auto 26vw;
+    } 
+    .main-left{
+        width: 6rem;
+        z-index: 5;          
+    }   
+    .main-container .main-left .profile{
+        display: none;
+    }
+    aside h3{
+        display: none;
+    }   
+    aside .btn{
+        display: none;
+    }   
+    
+    /* .........MAX WIDTH(991px)..... */ 
+    @media (max-width:1100px) {
+        nav .serch-bar{
+            display: none;
+        } 
+        .main-container{
+            grid-template-columns: auto 0;
+        }
+        .main-right{
+            display: none;
+        }  
+        .main-left{        
+            right: 0;  
+            top: 16%;  
+            position: fixed;               
+        }     
+          
+                
+    }
+}
+/* =====================End Media Queryes======================= */
+
+
+

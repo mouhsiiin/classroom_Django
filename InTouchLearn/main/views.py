@@ -15,12 +15,6 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib import messages
 
 
-@require_login
-def dashboard(request): 
-    user = User.objects.get(id=request.session.get("user_id"))
-    classes = virtual_class.objects.filter(admin=user)
-    print(classes)
-    return render(request, "main/dashboard.html", {"classrooms": classes})
 
 
 def login(request):
@@ -51,7 +45,7 @@ def login(request):
 
 
         request.session["user_id"] = user.id
-        return redirect("dashboard")
+        return redirect("classrooms")
 
     return render(request, "main/login.html", {})
 
