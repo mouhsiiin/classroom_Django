@@ -7,6 +7,7 @@ def require_login(func):
     def wrapper(request, *args, **kwargs):
 
         user = User.objects.filter(id=request.session.get("user_id")).first()
+        print(user)
         if not request.session.get("user_id") or user.is_email_verified == False:
             print("User not authenticated. Redirecting to login.")
             return redirect("login")

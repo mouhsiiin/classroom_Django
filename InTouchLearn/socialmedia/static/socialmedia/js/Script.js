@@ -118,6 +118,12 @@ ProfileUploader.addEventListener('change',()=>{
     })
 });
 
+let logout = document.querySelector('#logoutbtn');
+logout.addEventListener('click',()=>{
+    console.log('logout');
+    window.location.href = '/logout';
+});
+
 
 
 //.................Start Add post Popup................
