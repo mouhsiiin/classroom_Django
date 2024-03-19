@@ -45,7 +45,7 @@ def login(request):
 
 
         request.session["user_id"] = user.id
-        return redirect("classrooms")
+        return redirect("home")
 
     return render(request, "main/login.html", {})
 

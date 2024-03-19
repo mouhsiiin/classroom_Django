@@ -14,7 +14,7 @@ class virtual_class(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     admin = models.ForeignKey("User", on_delete=models.CASCADE, related_name="admin_classes")
 
-  
+
 
 
 class  User(abstractUser):
