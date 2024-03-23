@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +42,14 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apps.manger.verify@gmail.com'
 EMAIL_HOST_PASSWORD = 'ekco paui vsoo nhnf'
 
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(BASE_DIR / "InTouchLearn" / "djangoBucket.json")
+
+DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+GS_PROJECT_ID = "civic-wharf-414911"
+CLOUD_STORAGE_BUCKET_NAME = "django_proj"
+GS_BUCKET_NAME = "django_proj"
+GS_CREDENTIALS = GS_CREDENTIALS
+
 
 
 # Application definition
@@ -55,6 +64,8 @@ INSTALLED_APPS = [
     "main",
     "socialmedia",
     "classrooms",
+    'storages',
+    'crispy_forms',
     
     
 ]
@@ -146,3 +157,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+AUTH_USER_MODEL = "main.User"

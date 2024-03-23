@@ -118,11 +118,6 @@ ProfileUploader.addEventListener('change',()=>{
     })
 });
 
-let logout = document.querySelector('#logoutbtn');
-logout.addEventListener('click',()=>{
-    console.log('logout');
-    window.location.href = '/logout';
-});
 
 
 
@@ -135,18 +130,6 @@ createButtonLg.addEventListener('click',()=>{
 
 document.querySelector('#feed-pic-upload').addEventListener('change',()=>{
     document.querySelector('#postIMg').src = URL.createObjectURL(document.querySelector('#feed-pic-upload').files[0]);
-});
-
-
-
-
-//.................Start Add story................
-let addStory = document.querySelector('#add-story');
-
-
-addStory.addEventListener('change',()=>{
-    document.querySelector('.story img').src = URL.createObjectURL(document.querySelector('#add-story').files[0]);
-    document.querySelector('.add-story').style.display='none'
 });
 
 
@@ -187,6 +170,7 @@ document.querySelectorAll('.action-button span:first-child i').forEach(liked=>{
 // ......................Theme CustoMize........................
 let theme = document.querySelector('.theme-customize')
 document.querySelector('#theme').addEventListener('click',()=>{
+    console.log('theme')
     theme.style.display='flex'
 });
 

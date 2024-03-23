@@ -1,0 +1,108 @@
+{% extends 'socialmedia/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block feeds %}
+<div class="container">
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <h5>Add a Post!</h5>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3 mb-5">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <form method="post" enctype="multipart/form-data" class="post-input">
+
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3 add-post ">
+                    {{ field.label_tag }}
+                    {% if field.widget.is_hidden %}
+                        {{ field }}
+                    {% elif field.widget.input_type == 'textarea' %}
+                        <textarea class="form-control" style="width: 100%;" name="{{ field.name }}" id="{{ field.id_for_label }}">{{ field.value|default:'' }}</textarea>
+                    {% elif field.widget.input_type == 'file' %}
+                    <input type="file" class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}">
+                    <span class="input-group-text">
+                        {% if field.name == 'image' %}
+                            <i class="fa fa-image"></i>
+                        {% elif field.name == 'video' %}
+                            <i class="bi bi-play-btn"></i>
+                        {% else %}
+                            {% endif %}
+                    </span>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    {% if field.help_text %}
+                        <small class="text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button class="btn btn-primary" >Post</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    {% for post in post_list %}
+    <div class="feed">
+        <div class="feed-top">
+            <div class="user">
+                <div class="profile-picture">
+                    <img src="{{ post.author.profile_picture.url }}" alt="">
+                </div>
+                <div class="info">
+                    <h3>{{ post.author.username }}</h3>
+                    <div class="time text-gry">
+                        <small><span>{{ post.created_on|timesince }} ago</span></small>
+                    </div>
+                </div>
+            </div>
+            <span class="edit">
+                <img src="{% static 'socialmedia/images/svg/three-dots.svg' %}">
+            </span>
+        </div>
+        <div class="caption">
+            <div class="title">{{ post.body }}</div>
+        </div>
+        <div class="feed-img">
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.image.name }}">
+            {% endif %}
+        </div>
+        <div class="video-post">
+            {% if post.video %}
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video controls class="embed-responsive-item">
+                        <source src="{{ post.video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            {% endif %}
+        </div>
+        <div class="action-button">
+            <div class="interaction-button">
+                <span><a href="{% url 'like' post.pk %}"><i class="fa fa-heart"></i></a></span>
+                <span><a href="{% url 'post-detail' post.pk %}"><i class="fa fa-comment-dots"></i></a></span>
+                <span><i class="fa fa-link"></i></span>
+            </div>
+            <div class="bookmark">
+                <i class="fa fa-bookmark"></i>
+            </div>
+        </div>
+        <!-- <div class="liked-by">
+            <span><img src="{% static 'socialmedia/images/img/n2.png' %}" alt=""></span>
+            <span><img src="{% static 'socialmedia/images/img/n3.png' %}" alt=""></span>
+            <span><img src="{% static 'socialmedia/images/img/n4.png' %}" alt=""></span>
+            <p>Liked by <b>Jhon Wiliams</b> and <b>77 comments other</b></p>
+        </div> -->
+        <div class="comments text-gry">
+            <a href="{% url 'post-detail' post.pk %}">View all comments</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock feeds %}
