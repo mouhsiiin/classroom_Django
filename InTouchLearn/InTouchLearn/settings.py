@@ -42,7 +42,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apps.manger.verify@gmail.com'
 EMAIL_HOST_PASSWORD = 'ekco paui vsoo nhnf'
 
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file(BASE_DIR / "InTouchLearn" / "djangoBucket.json")
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(BASE_DIR.parent / "djangoBucket.json")
 
 DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 GS_PROJECT_ID = "civic-wharf-414911"
