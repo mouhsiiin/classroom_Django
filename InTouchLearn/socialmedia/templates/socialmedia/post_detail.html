@@ -1,0 +1,97 @@
+
+{% extends 'socialmedia/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block feeds %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-5 col-sm-6">
+            <a href="{% url 'post-list' %}" class="btn btn-light">Back To Feed</a>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <div class="feed">
+                <div class="feed-top">
+                    <div class="user">
+                        <div class="profile-picture">
+                            <img src="{{ post.author.profile_picture.url }}" alt="">
+                        </div>
+                        <div class="info">
+                            <h3>{{ post.author.username }}</h3>
+                            <div class="time text-gry">
+                                <small><span>{{ post.created_on|timesince }} ago</span></small>
+                            </div>
+                        </div>
+                    </div>
+                    {% if request.user == post.author %}
+                    <span class="edit">
+                        <a href="{% url 'post-edit' post.pk %}" style="color: #333;"><i class="far fa-edit"></i></a>
+                        <a href="{% url 'post-delete' post.pk %}" style="color: #333;"><i class="fas fa-trash"></i></a>
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="caption">
+                    <div class="title">{{ post.body }}</div>
+                </div>
+                <div class="feed-img">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.image.name }}">
+                    {% endif %}
+                </div>
+                <div class="video-post">
+                    {% if post.video %}
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video controls class="embed-responsive-item">
+                                <source src="{{ post.video.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="action-button">
+                    <div class="interaction-button">
+                        <form method="POST" action="{% url 'like' post.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                <i class="far fa-thumbs-up"> <span>{{ post.likes.all.count }}</span></i>
+                            </button>
+                        </form>
+                        <form method="POST" action="{% url 'dislike' post.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                <i class="far fa-thumbs-down"> <span>{{ post.dislikes.all.count }}</span></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="bookmark">
+                        <i class="fa fa-bookmark"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3 mb-5">
+        <div class="col-md-5 col-sm-12">
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {% if field.label == 'Body' %}
+                            {{ field|as_crispy_field }}
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button class="btn btn-primary">Post</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

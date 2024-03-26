@@ -1,0 +1,196 @@
+{% extends 'socialmedia/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block feeds %}
+
+    <div class="row justify-content-center mt-3 mb-5">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <form method="post" enctype="multipart/form-data" class="post-input">
+
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3 add-post ">
+                    {{ field.label_tag }}
+                    {% if field.widget.is_hidden %}
+                        {{ field }}
+                    {% elif field.widget.input_type == 'textarea' %}
+                        <textarea class="form-control" style="width: 100%;" name="{{ field.name }}" id="{{ field.id_for_label }}">{{ field.value|default:'' }}</textarea>
+                    {% elif field.widget.input_type == 'file' %}
+                    <input type="file" class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}">
+                    <span class="input-group-text">
+                        {% if field.name == 'image' %}
+                            <i class="fa fa-image"></i>
+                        {% elif field.name == 'video' %}
+                            <i class="bi bi-play-btn"></i>
+                        {% else %}
+                            {% endif %}
+                    </span>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    {% if field.help_text %}
+                        <small class="text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button class="btn btn-primary" >Post</button>
+            </form>
+        </div>
+    </div>
+
+    {% for post in post_list %}
+    <div class="feed">
+        <div class="feed-top">
+            <div class="user">
+                <div class="profile-picture">
+                    <img src="{{ post.author.profile_picture.url }}" alt="">
+                </div>
+                <div class="info">
+                    <h3>{{ post.author.username }}</h3>
+                    <div class="time text-gry">
+                        <small><span>{{ post.created_on|timesince }} ago</span></small>
+                    </div>
+                </div>
+            </div>
+            <span class="edit">
+                <img src="{% static 'socialmedia/images/svg/three-dots.svg' %}">
+            </span>
+        </div>
+        <div class="caption">
+            <div class="title">{{ post.body }}</div>
+        </div>
+        <div class="feed-img">
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.image.name }}">
+            {% endif %}
+        </div>
+        <div class="video-post">
+            {% if post.video %}
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video controls class="embed-responsive-item">
+                        <source src="{{ post.video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            {% endif %}
+        </div>
+        <div class="action-button">
+                <div class="interaction-button">
+                    <button class="like-button" data-post-id="{{ post.pk }}" class="btn btn-primary">
+                        {% if user in post.likes.all %}
+                            <i class="fas fa-thumbs-up"> </i>
+                        {% else %}
+                            <i class="far fa-thumbs-up"> </i>
+                        {% endif %}
+                        <span id="like-count">{{ post.likes.all.count }}</span>
+                    </button>
+                    <button class="dislike-button" data-post-id="{{ post.pk }}" class="btn btn-primary">
+                        {% if user in post.dislikes.all %}
+                            <i class="fas fa-thumbs-down"> </i>
+                        {% else %}
+                            <i class="far fa-thumbs-down"> </i>
+                        {% endif %}
+                        <span id="dislike-count">{{ post.dislikes.all.count }}</span>
+                    </button>
+                </div>
+        </div>
+        <div class="bookmark">
+            <i class="fa fa-bookmark"></i>
+        </div>
+    </div>
+
+    {% endfor %}
+    <div id="load-more-container">
+        <button id="load-more-btn">Load More</button>
+    </div>
+    
+
+    
+    
+    
+    <script>
+
+    //confirmation msg for creating a post
+    document.addEventListener('DOMContentLoaded', function(){
+        const postForm = document.querySelector('.post-input');
+        postForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            const isConfirmed = confirm('Are you sure you want to post this?');
+            if (isConfirmed){
+                postForm.submit();
+            }
+            
+        });
+    });
+
+
+    // handel like and dislike post
+    document.addEventListener('DOMContentLoaded', function(){
+        console.log('js is working');
+        const likeBtn = document.querySelectorAll('.like-button');
+        const dislikeBtn = document.querySelectorAll('.dislike-button');
+        
+        likeBtn.forEach(btn => {
+            btn.addEventListener('click', function(){
+                const postId = btn.getAttribute('data-post-id');
+                console.log(postId);
+
+                fetch(`/social/post/${postId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'}})
+                .then(response => {
+                    if (response.ok){
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    console.log(data);
+                   if (data.liked){
+                       btn.innerHTML = `<i class="fas fa-thumbs-up"></i><span id="like-count">${data.like_count}</span>`;
+                   } else {
+                       btn.innerHTML = `<i class="far fa-thumbs-up"></i><span id="like-count">${data.like_count}</span>`;
+                   }
+
+                });
+                
+            });
+        });
+
+        dislikeBtn.forEach(btn => {
+            btn.addEventListener('click', function(){
+                const postId = btn.getAttribute('data-post-id');
+                console.log(postId);
+
+                fetch(`/social/post/${postId}/dislike`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'}})
+                .then(response => {
+                    if (response.ok){
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    console.log(data);
+                   if (data.disliked){
+                       btn.innerHTML = `<i class="fas fa-thumbs-down"></i><span id="dislike-count">${data.dislike_count}</span>`;
+                   } else {
+                       btn.innerHTML = `<i class="far fa-thumbs-down"></i><span id="dislike-count">${data.dislike_count}</span>`;
+                   }
+
+                });
+                
+            });
+        });
+
+       
+    });
+    
+
+</script>
+
+{% endblock feeds %}

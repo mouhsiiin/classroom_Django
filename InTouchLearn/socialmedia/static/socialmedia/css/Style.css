@@ -726,6 +726,17 @@ aside .menu-item:nth-last-child(2){
     border: 2px dashed var(--color-dark);
     font-weight: bold;      
 }
+
+
+/*.............. video feed.............. */
+.video-post{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+    
+}
 /*.............. End Add post popup.............. */
 
 
