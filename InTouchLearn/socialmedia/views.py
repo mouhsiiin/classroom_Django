@@ -7,6 +7,9 @@ from django.contrib.auth import get_user_model
 
 from main.models import User
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+
+from django.http import JsonResponse, HttpResponseBadRequest
 
 
 
@@ -18,19 +21,25 @@ def editprofile(request):
 @login_required
 def post_list_view(request):
     posts = Post.objects.all().order_by('-created_on')
+    paginator = Paginator(posts, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     form = PostForm()
 
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
-        new_post = form.save(commit=False)
-        new_post.author = request.user
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.author = request.user
         try:
             new_post.save()
-            print("===>>","Post Saved")
+            print("===>>", "Post Saved")
+            
         except Exception as e:
             print(e)
-            print("===>>","Post Not Saved")
-        
+            print("===>>", "Post Not Saved")
+
     user = User.objects.get(id=request.session["user_id"])
     userInformation = {
         "username": user.username,
@@ -41,9 +50,10 @@ def post_list_view(request):
         "profile_picture": user.profile_picture
     }
     context = {
-        'post_list': posts,
+        'post_list': page_obj,
         'form': form,
-        'user': userInformation
+        'user': userInformation,
+        'page_obj': page_obj
     }
     return render(request, 'socialmedia/post_list.html', context)
 
@@ -69,7 +79,7 @@ def post_detail_view(request, pk):
         'form': form,
         'comments': comments,
     }
-    return render(request, 'social/post_detail.html', context)
+    return render(request, 'socialmedia/post_detail.html', context)
 
 @login_required
 def post_edit_view(request, pk):
@@ -89,7 +99,7 @@ def post_edit_view(request, pk):
         'form': form,
         'post': post,
     }
-    return render(request, 'social/post_edit.html', context)
+    return render(request, 'socialmedia/post_edit.html', context)
 
 @login_required
 def post_delete_view(request, pk):
@@ -104,66 +114,57 @@ def post_delete_view(request, pk):
     context = {
         'post': post,
     }
-    return render(request, 'social/post_delete.html', context)
+    return render(request, 'socialmedia/post_delete.html', context)
 
 
 @login_required
 def add_like(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    is_dislike = False
 
-    for dislike in post.dislikes.all():
-        if dislike == request.user:
-            is_dislike = True
-            break
+    if request.method == 'POST':
+        is_like = request.user in post.likes.all()
+        is_dislike = request.user in post.dislikes.all()
 
-    if is_dislike:
-        post.dislikes.remove(request.user)
+        if is_like:
+            post.likes.remove(request.user)
+            liked = False
+        else:
+            if is_dislike:
+                post.dislikes.remove(request.user)
+            post.likes.add(request.user)
+            liked = True
 
-    is_like = False
+        like_count = post.likes.all().count()
+        dislike_count = post.dislikes.all().count()
 
-    for like in post.likes.all():
-        if like == request.user:
-            is_like = True
-            break
-
-    if not is_like:
-        post.likes.add(request.user)
-
-    if is_like:
-        post.likes.remove(request.user)
-
-    next_url = request.POST.get('next', '/')
-    return redirect(next_url)
+        return JsonResponse({'like_count': like_count, 'dislike_count': dislike_count, 'liked': liked})
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @login_required
 def add_dislike(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    is_like = False
 
-    for like in post.likes.all():
-        if like == request.user:
-            is_like = True
-            break
+    if request.method == 'POST':
+        is_like = request.user in post.likes.all()
+        is_dislike = request.user in post.dislikes.all()
 
-    if is_like:
-        post.likes.remove(request.user)
+        if is_dislike:
+            post.dislikes.remove(request.user)
+            disliked = False
+        else:
+            if is_like:
+                post.likes.remove(request.user)
+            post.dislikes.add(request.user)
+            disliked = True
 
-    is_dislike = False
+        like_count = post.likes.all().count()
+        dislike_count = post.dislikes.all().count()
 
-    for dislike in post.dislikes.all():
-        if dislike == request.user:
-            is_dislike = True
-            break
+        return JsonResponse({'like_count': like_count, 'dislike_count': dislike_count, 'disliked': disliked})
+    else:
+        return HttpResponseBadRequest()
 
-    if not is_dislike:
-        post.dislikes.add(request.user)
-
-    if is_dislike:
-        post.dislikes.remove(request.user)
-
-    next_url = request.POST.get('next', '/')
-    return redirect(next_url)
 
 @login_required
 def add_comment_like(request, pk):

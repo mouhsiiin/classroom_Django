@@ -294,7 +294,7 @@
                     </div>
                     <label for="profile-upload" class="btn btn-primary btn-lg">Update Profile Picture</label>
                     <input type="file" accept="image/jpg, image/png, image/jpeg" id="profile-upload">
-                    <a href="editProfile" class="btn btn-primary btn-lg" id="editProfile">Edit Profile</a>
+                    <a href="/social/editProfile" class="btn btn-primary btn-lg" id="editProfile">Edit Profile</a>
                     <a href="/logout" class="btn btn-primary btn-lg" id="logoutbtn">Log Out</a>
                 </div>
                 <span class="close"><i class="fa fa-close"></i></span>
@@ -388,17 +388,18 @@
 
         <!-- ...................End PopUps Aria................... -->
 
-
-
-
-
-
-
+        
     <!-- ...................Swiper JS Link.................. -->
     <script src="{% static 'socialmedia/css/Swiper/swiper-bundle.min.js' %}"></script>
 
     <!-- ...................Custom JS Link.................. -->
     <script src="{% static 'socialmedia/js/Script.js' %}"></script>
+    <script>
+        document.querySelector('.logo').addEventListener('click',()=>{
+            window.location.href = '/';
+        });
+        
+    </script>
 
 </body>
 </html>

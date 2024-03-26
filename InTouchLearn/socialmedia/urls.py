@@ -5,7 +5,7 @@ from .views import (
     comment_reply_view, editprofile
 )
 
-
+app_name = 'socialmedia'
 urlpatterns = [
     path("editProfile", editprofile, name="editprofile"),
     path('', post_list_view, name='post-list'),

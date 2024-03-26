@@ -3,12 +3,7 @@
 {% load static %}
 
 {% block feeds %}
-<div class="container">
-    <div class="row justify-content-center mt-3">
-        <div class="col-md-5 col-sm-12 border-bottom">
-            <h5>Add a Post!</h5>
-        </div>
-    </div>
+
     <div class="row justify-content-center mt-3 mb-5">
         <div class="col-md-5 col-sm-12 border-bottom">
             <form method="post" enctype="multipart/form-data" class="post-input">
@@ -43,9 +38,6 @@
             </form>
         </div>
     </div>
-
-
-
 
     {% for post in post_list %}
     <div class="feed">
@@ -84,25 +76,121 @@
             {% endif %}
         </div>
         <div class="action-button">
-            <div class="interaction-button">
-                <span><a href="{% url 'like' post.pk %}"><i class="fa fa-heart"></i></a></span>
-                <span><a href="{% url 'post-detail' post.pk %}"><i class="fa fa-comment-dots"></i></a></span>
-                <span><i class="fa fa-link"></i></span>
-            </div>
-            <div class="bookmark">
-                <i class="fa fa-bookmark"></i>
-            </div>
+                <div class="interaction-button">
+                    <button class="like-button" data-post-id="{{ post.pk }}" class="btn btn-primary">
+                        {% if user in post.likes.all %}
+                            <i class="fas fa-thumbs-up"> </i>
+                        {% else %}
+                            <i class="far fa-thumbs-up"> </i>
+                        {% endif %}
+                        <span id="like-count">{{ post.likes.all.count }}</span>
+                    </button>
+                    <button class="dislike-button" data-post-id="{{ post.pk }}" class="btn btn-primary">
+                        {% if user in post.dislikes.all %}
+                            <i class="fas fa-thumbs-down"> </i>
+                        {% else %}
+                            <i class="far fa-thumbs-down"> </i>
+                        {% endif %}
+                        <span id="dislike-count">{{ post.dislikes.all.count }}</span>
+                    </button>
+                </div>
         </div>
-        <!-- <div class="liked-by">
-            <span><img src="{% static 'socialmedia/images/img/n2.png' %}" alt=""></span>
-            <span><img src="{% static 'socialmedia/images/img/n3.png' %}" alt=""></span>
-            <span><img src="{% static 'socialmedia/images/img/n4.png' %}" alt=""></span>
-            <p>Liked by <b>Jhon Wiliams</b> and <b>77 comments other</b></p>
-        </div> -->
-        <div class="comments text-gry">
-            <a href="{% url 'post-detail' post.pk %}">View all comments</a>
+        <div class="bookmark">
+            <i class="fa fa-bookmark"></i>
         </div>
     </div>
+
     {% endfor %}
-</div>
+    <div id="load-more-container">
+        <button id="load-more-btn">Load More</button>
+    </div>
+    
+
+    
+    
+    
+    <script>
+
+    //confirmation msg for creating a post
+    document.addEventListener('DOMContentLoaded', function(){
+        const postForm = document.querySelector('.post-input');
+        postForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            const isConfirmed = confirm('Are you sure you want to post this?');
+            if (isConfirmed){
+                postForm.submit();
+            }
+            
+        });
+    });
+
+
+    // handel like and dislike post
+    document.addEventListener('DOMContentLoaded', function(){
+        console.log('js is working');
+        const likeBtn = document.querySelectorAll('.like-button');
+        const dislikeBtn = document.querySelectorAll('.dislike-button');
+        
+        likeBtn.forEach(btn => {
+            btn.addEventListener('click', function(){
+                const postId = btn.getAttribute('data-post-id');
+                console.log(postId);
+
+                fetch(`/social/post/${postId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'}})
+                .then(response => {
+                    if (response.ok){
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    console.log(data);
+                   if (data.liked){
+                       btn.innerHTML = `<i class="fas fa-thumbs-up"></i><span id="like-count">${data.like_count}</span>`;
+                   } else {
+                       btn.innerHTML = `<i class="far fa-thumbs-up"></i><span id="like-count">${data.like_count}</span>`;
+                   }
+
+                });
+                
+            });
+        });
+
+        dislikeBtn.forEach(btn => {
+            btn.addEventListener('click', function(){
+                const postId = btn.getAttribute('data-post-id');
+                console.log(postId);
+
+                fetch(`/social/post/${postId}/dislike`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'}})
+                .then(response => {
+                    if (response.ok){
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    console.log(data);
+                   if (data.disliked){
+                       btn.innerHTML = `<i class="fas fa-thumbs-down"></i><span id="dislike-count">${data.dislike_count}</span>`;
+                   } else {
+                       btn.innerHTML = `<i class="far fa-thumbs-down"></i><span id="dislike-count">${data.dislike_count}</span>`;
+                   }
+
+                });
+                
+            });
+        });
+
+       
+    });
+    
+
+</script>
+
 {% endblock feeds %}
