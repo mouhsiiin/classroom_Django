@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'socialmedia/images/logo.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <title>(FST Career) Website</title>
     
-    {% load static %}
 
     <!-- .................CUSTOM CSS LINK................. -->
-    <link rel="stylesheet" href="{% static 'socialmedia\css\Style.css' %}">
+    <link rel="stylesheet" href="{% static 'socialmedia/css/Style.css' %}">
 
     <!-- ...............Font Awesome Link................. -->
-    <link rel="stylesheet" href="{% static 'socialmedia\css/fontawesome-free-6.3.0-web/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'socialmedia/css/fontawesome-free-6.3.0-web/css/all.css' %}">
 
     <!-- ...............Swiper Slider Link.................. -->
-    <link rel="stylesheet" href="{% static 'socialmedia\css/Swiper/swiper-bundle.min.css' %}">
 
 
 </head>
@@ -197,83 +199,6 @@
                 </div>
                 <!--================== Main Middle End==================  -->
 
-                
-
-                <!--==================  Main Right Start==================  -->
-                <div class="main-right">
-                    <!-- ..............Start Message............ -->
-
-                    <div class="messages">
-                        <!-- ....Message top..... -->
-                        <div class="message-top">
-                            <h4>Message</h4> <i class="fa fa-edit"></i>
-                        </div>
-                       
-                        <!-- ......Message Categories..... -->
-                        
-                        <!-- ......Message..... -->
-                        <div class="message">
-                            <div class="profile-picture">
-                                <img src="./Assets/images/img/s9 (1).png" alt="">
-                                <div class="green-active"></div>
-                            </div>
-                            <div class="message-body">
-                                <h5>Mouhsin Boumargoud</h5>
-                                <p class="text-gry">
-                                   Lorem ipsum dolor sit amet.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="message">
-                            <div class="profile-picture">
-                                <img src="./Assets/images/img/s9 (2).png" alt="">
-                                <div class="green-active"></div>
-                            </div>
-                            <div class="message-body">
-                                <h5>Lana White</h5>
-                                <p class="text-gry">
-                                   Lorem ipsum dolor sit amet.
-                                </p>
-                            </div>
-                        </div>
-                       
-                    </div> 
-                    
-                    <!-- ..............End Message............ -->
-
-
-                    <!-- ..............Start Firend Request............ -->
-                    <div class="firend-rquest">
-                        <h4>Request</h4>
-                        <div class="request">
-                            <div class="info">
-                                <div class="profile-picture">
-                                    <img src="./Assets/images/img/f4.jpg" alt="">
-                                </div>
-                                <div>
-                                    <h5>Dnne Danele</h5>
-                                    <p class="text-gry">
-                                        4 mutual firend
-                                    </p>
-                                    <small class="text-gry alert" >You have accepted request</small>                                    
-                                </div>
-                            </div>
-                            <div class="action">
-                                <div class="btn btn-primary" id="Accept">
-                                    Accept
-                                </div>
-                                <div class="btn btn-danger" id="Delete">
-                                    Delete
-                                </div>
-                            </div>
-                        </div>
-                       
-                    </div>
-                    <!-- ..............End Firend Request............ -->
-
-                </div>
-                <!--==================  Main Right End================== -->
-
 
             </div>
         </main>
@@ -294,7 +219,7 @@
                     </div>
                     <label for="profile-upload" class="btn btn-primary btn-lg">Update Profile Picture</label>
                     <input type="file" accept="image/jpg, image/png, image/jpeg" id="profile-upload">
-                    <a href="/social/editProfile" class="btn btn-primary btn-lg" id="editProfile">Edit Profile</a>
+                    <a href="{% url 'socialmedia:profile' user.username %}" class="btn btn-primary btn-lg" id="editProfile">Profile</a>
                     <a href="/logout" class="btn btn-primary btn-lg" id="logoutbtn">Log Out</a>
                 </div>
                 <span class="close"><i class="fa fa-close"></i></span>
