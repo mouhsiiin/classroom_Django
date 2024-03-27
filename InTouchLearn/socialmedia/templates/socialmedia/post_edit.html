@@ -1,0 +1,43 @@
+{% extends 'socialmedia/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block feeds %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-3 col-sm-6">
+            <a href="{% url 'post-detail' object.pk %}" class="btn btn-light">Back to Feed</a>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5 col-sm-12">
+            <h5>Update Your Post</h5>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3 mb-5">
+        <div class="col-md-5 col-sm-12">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {% if field.widget.is_hidden %}
+                        {{ field }}
+                    {% elif field.widget.input_type == 'textarea' %}
+                        <textarea class="form-control" style="width: 100%;" name="{{ field.name }}" id="{{ field.id_for_label }}">{{ field.value|default:'' }}</textarea>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    {% if field.help_text %}
+                        <small class="text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button class="btn btn-success mt-3" style="width: 75%;">Submit!</button>
+        </div>
+        </div>
+        <div class="d-grid gap-2">
+            
+    </form>
+</div>
+</div>
+{% endblock feeds %}

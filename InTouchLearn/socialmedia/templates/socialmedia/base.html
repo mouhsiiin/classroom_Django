@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'socialmedia/images/logo.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <title>(FST Career) Website</title>
+    
+
+    <!-- .................CUSTOM CSS LINK................. -->
+    <link rel="stylesheet" href="{% static 'socialmedia/css/Style.css' %}">
+
+    <!-- ...............Font Awesome Link................. -->
+    <link rel="stylesheet" href="{% static 'socialmedia/css/fontawesome-free-6.3.0-web/css/all.css' %}">
+
+    <!-- ...............Swiper Slider Link.................. -->
+
+
+</head>
+<body>
+        <!-- ...................Start Navbar................... -->
+        <nav>
+            <div class="container nav-container">
+                <div class="logo">
+                    <h3>FST <span>Career</span></h3>
+                </div>
+                <div class="serch-bar">
+                    <i class="fa fa-search"></i>
+                    <input type="search" placeholder="Serch For Creators">
+                </div>
+                <div class="add-post">
+                    <label for="add-post" class="btn btn-primary mini-button" >Add Post</label>
+                    <div class="profile-picture" id="my-profile-picture">
+                        <img src="{{ user.profile_picture.url }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </nav>       
+        <!-- ...................Start Navbar................... -->
+
+
+
+        <!-- ...................Start Main Section................... -->
+        <main>
+            <div class="container main-container">
+
+
+                <!--================== Main Left Start ==================  -->
+                <div class="main-left">
+
+
+                    <!-- .......Profile.Start........ -->
+                    <a  class="profile">
+                        <div class="profile-picture" id="my-profile-picture">
+                            <img src="{{ user.profile_picture.url }}" alt="profile">
+                        </div>
+                        <div class="profile-handle">
+                            <h4>{{ user.username}}</h4>
+                            
+                            <p class="text-gry">
+                               {{ user.email }}
+                            </p>
+                        </div>
+                    </a>
+                     <!-- .......Profile.End........ -->
+
+
+
+                    <!-- .........Start Aside Bar.......... -->
+                    <aside>
+
+                        <a  class="menu-item active">
+                            <span><img src="{% static 'socialmedia/images/svg/house-door.svg'%}" alt=""></span> <h3>Home</h3>
+                        </a>
+
+                        <a  class="menu-item">
+                            <span><img src="{% static 'socialmedia/images/svg/joystick.svg'%}" alt=""></span> <h3>Explore</h3>
+                        </a>
+
+                        <a  class="menu-item" id="Notify-box">
+                            <span><img src="{% static 'socialmedia/images/svg/bell.svg'%}" alt=""></span>
+                            <small class="notfy-counter nt" id="ntCounter1">7+</small>
+                             <h3>Notifications</h3>
+
+                            <!-- ...........Notification Box Start.......... -->
+                            <div class="notification-box">
+                                <div>
+                                    <div class="profile-picture">
+                                        <img src="{% static 'socialmedia/images/img/n1.jpg'%}" alt="">                                        
+                                    </div>
+                                    <div class="notification-body">
+                                        <b>Maria Lily</b> accepted your firend request
+                                        <small class="text-gry">1 DAYS AGO</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="profile-picture">
+                                        <img src="{% static 'socialmedia/images/img/n2.png'%}" alt="">                                        
+                                    </div>
+                                    <div class="notification-body">
+                                        <b>Jhon Evan</b> commented on your post
+                                        <small class="text-gry">2 HOUR AGO</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="profile-picture">
+                                        <img src="{% static 'socialmedia/images/img/n3.png'%}" alt="">                                        
+                                    </div>
+                                    <div class="notification-body">
+                                        <b>Emaliy Benjamin</b> liked on your post
+                                        <small class="text-gry">JUST NOW</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="profile-picture">
+                                        <img src="{% static 'socialmedia/images/img/n4.png'%}" alt="">                                        
+                                    </div>
+                                    <div class="notification-body">
+                                        <b>Mark Trump</b> and <b>10 other</b> liked on your post
+                                        <small class="text-gry">2 HOUR AGO</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="profile-picture">
+                                        <img src="{% static 'socialmedia/images/img/n5.png'%}" alt="">                                        
+                                    </div>
+                                    <div class="notification-body">
+                                        <b>Evrahim Alli</b> and <b>5 other</b> commented on your post
+                                        <small class="text-gry">3 DAYS AGO</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ...........Notification Box End.......... -->
+
+                        </a>                     
+
+                        <a  class="menu-item" id="messageMenu">
+                            <span><img src="{% static 'socialmedia/images/svg/chat-left-dots.svg'%}" alt=""></span> 
+                            <small class="notfy-counter" id="notfyCoutner2">3</small>
+                            <h3>Message</h3>
+                        </a>
+
+                        <a  class="menu-item" href="/classrooms">
+                            <span><img src="{% static 'socialmedia/images/svg/bookmarks.svg'%}" alt=""></span> <h3>Classroom</h3>
+                        </a>
+
+                        <a  class="menu-item">
+                            <span><img src="{% static 'socialmedia/images/svg/graph-up-arrow.svg'%}" alt=""></span> <h3>Analytics</h3>
+                        </a>
+
+                        <a  class="menu-item" id="theme">
+                            <span><img src="{% static 'socialmedia/images/svg/palette.svg'%}" alt=""></span> <h3>Theme</h3>
+                        </a>
+
+                        <a  class="menu-item">
+                            <span><img src="{% static 'socialmedia/images/svg/gear.svg'%}" alt=""></span> <h3>Settings</h3>
+                        </a>
+
+
+                        <!-- ...........Add Post Btn......... -->
+                        <label for="add-post" class="btn btn-primary btn-lg" id="crate-lg">Create A Post</label>
+
+
+                    </aside>
+                    <!-- ..........End Aside Bar........... -->
+
+
+
+                </div>
+                <!--==================  Main Left End =================== -->
+
+
+                <!--================== Main Middle Start================== -->
+                <div class="main-middle">
+                    <div class="middle-container">
+                          
+
+                    <!-- .........Post Input.......... -->
+                    <form class="add-post input-post">
+                        <div class="profile-picture" id="my-profile-picture">
+                            <img src="{{ user.profile_picture.url }}" alt="">
+                        </div>
+                        <input type="text" placeholder="What's on your mind ?" id="add-post">
+                        <input type="submit" value="post" class="btn btn-primary">
+                    </form>
+
+                       <!--.............. Feed Aria Start............... -->
+                       <div class="feeds"> 
+                        {% block feeds %}
+                        
+                        {% endblock %}                     
+                       </div>                                          
+                       <!--.............. Feed Aria End............... -->
+                    </div> 
+                </div>
+                <!--================== Main Middle End==================  -->
+
+
+            </div>
+        </main>
+        <!-- ...................Start Main Section................... -->
+
+
+
+
+        <!-- ...................Start PopUps Aria................... -->
+        <!-- ................Start Profile-Popup............ -->
+        <div class="popup profile-popup">
+            <div>
+                <div class="popup-box profile-popup-box">
+                    <h1>{{ user.username }}</h1>
+                    <p>{{ user.email }}</p>
+                    <div id="my-profile-picture">
+                        <img src="{{ user.profile_picture.url }}" >
+                    </div>
+                    <label for="profile-upload" class="btn btn-primary btn-lg">Update Profile Picture</label>
+                    <input type="file" accept="image/jpg, image/png, image/jpeg" id="profile-upload">
+                    <a href="{% url 'socialmedia:profile' user.username %}" class="btn btn-primary btn-lg" id="editProfile">Profile</a>
+                    <a href="/logout" class="btn btn-primary btn-lg" id="logoutbtn">Log Out</a>
+                </div>
+                <span class="close"><i class="fa fa-close"></i></span>
+            </div>          
+        </div>
+        <!-- ................End Profile-Popup............ -->
+
+
+        <!-- ................Start Add Post Popup............ -->
+        <div class="popup add-post-popup">
+            <div>
+                <form class="popup-box add-post-pop">
+                    <h1>Add New Post</h1>
+                    <div class="row post-title">
+                        <label>Title</label>                       
+                        <input type="text" placeholder="What's on your mind ?" id="title-input">
+                    </div>
+                    <div class="row post-img">                     
+                        <img src="" id="postIMg">                      
+                        <label for="feed-pic-upload" class="feed-upload-button">
+                            <span><i class="fa fa-add"></i></span> 
+                            Upload A Picture
+                        </label>
+                        <input type="file" accept="image/jpg, image/png, image/jpeg" id="feed-pic-upload">
+                        <input type="submit" class="btn btn-primary btn-lg bbb" value="Add Post">
+                    </div>
+                </form>
+                <span class="close"><i class="fa fa-close"></i></span>
+            </div>
+        </div>
+        <!-- ................End  Add Post Popup............ -->
+
+
+        <!-- ................Start Theme Customize Popup............ -->
+        <div class="popup theme-customize">
+            <div>
+                <div class="popup-box theme-customize-popup-box">
+                    <h1>Coustomize Your Theme</h1>
+                    <p>Manege Your Font Size, Color, and Background</p>
+
+                    <!-- ........Font Size....... -->
+                    <div class="font-size">
+                        <h4>Font Size</h4>
+                        <div>
+                            <div>
+                                <h6>Aa</h6>
+                             </div>
+                             <div class="choose-size">
+                                 <span class="font-size-1"></span>
+                                 <span class="font-size-2 " ></span>
+                                 <span class="font-size-3 active"></span>
+                                 <span class="font-size-4"></span>
+                                 <span class="font-size-5"></span>
+                             </div>
+                             <div>
+                                 <h3>Aa</h3>
+                             </div>
+                        </div>
+                    </div>
+                    <!-- ..........Primary Colors........ -->
+                    <div class="colors">
+                        <h4>Color</h4>
+                        <div class="choose-color">
+                            <span class="color-1 active"></span>
+                            <span class="color-2 "></span>
+                            <span class="color-3 "></span>
+                            <span class="color-4 "></span>
+                            <span class="color-5 "></span>
+                        </div>
+                    </div>
+                    <!-- ...........Background Colors.......... -->
+                    <div class="background">
+                        <h4>Background</h4>
+                        <div class="choose-bg">
+                            <div class="bg1 active">
+                                <span></span>
+                                <h5 >Light</h5>
+                            </div>
+                            <div class="bg2">
+                                <span></span>
+                                <h5 >Dark</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="close"><i class="fa fa-close"></i></span>
+            </div>            
+        </div>
+        <!-- ................End   Theme Customize Popup............ -->
+
+
+        <!-- ...................End PopUps Aria................... -->
+
+        
+    <!-- ...................Swiper JS Link.................. -->
+    <script src="{% static 'socialmedia/css/Swiper/swiper-bundle.min.js' %}"></script>
+
+    <!-- ...................Custom JS Link.................. -->
+    <script src="{% static 'socialmedia/js/Script.js' %}"></script>
+    <script>
+        document.querySelector('.logo').addEventListener('click',()=>{
+            window.location.href = '/';
+        });
+        
+    </script>
+
+</body>
+</html>

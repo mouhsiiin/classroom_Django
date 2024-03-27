@@ -1,4 +1,4 @@
-{% extends 'classrooms/base.html' %}
+{% extends 'main/base.html' %}
 {% block title %}
     Classroom
 {% endblock %}
@@ -36,7 +36,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for classroom in classrooms %}
+                        {% for classroom in classes %}
                         <tr>
                             <td>{{ classroom.id }}</td>
                             <td>{{ classroom.class_name }}</td>
