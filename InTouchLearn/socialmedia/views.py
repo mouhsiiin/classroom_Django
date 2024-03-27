@@ -17,6 +17,21 @@ from django.http import JsonResponse, HttpResponseBadRequest
 def editprofile(request):
     return render(request, "socialmedia/editprofile.html", {})
 
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    userInformation = {
+        "username": user.username,
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "bio": user.bio,
+        "profile_picture": user.profile_picture
+    }
+
+    context = {
+        'user': userInformation,
+    }
+    return render(request, 'socialmedia/profile.html', context)
 
 @login_required
 def post_list_view(request):
