@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
-from .models import virtual_class, User
+from .models import User
 
-admin.site.register(virtual_class)
 admin.site.register(User)
