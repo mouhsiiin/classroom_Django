@@ -9,7 +9,6 @@ class Post(models.Model):
     body = models.TextField()
     image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True)
     video = models.FileField(upload_to='uploads/post_videos', blank=True, null=True)
-   
     created_on = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='likes')

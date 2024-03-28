@@ -1,0 +1,58 @@
+{% extends 'classrooms/parent_class.html' %}
+{% load static %}
+{% block head %}
+{% endblock %}
+
+{% block hamburger %}
+    <div class="jumbotron jumbotron-fluid class_jumbotron">
+        <div class="container">
+        <h1 class="display-4 class_title">{{ classroom.classroom_name }}</h1>
+        <p class="lead class_code">Class code: {{ classroom.class_code }}</p>
+        </div>
+    </div>
+    <input type="hidden" id="assignment_id" name="assignment_id">
+    <div class="contatiner_of_assignments">
+        {% if assignments %}
+            {% for assignment in assignments %}
+                {% for teacher in teachers %}
+                    {% if teacher.teacher_id.id == user.id %}
+                        <a href="{% url 'classrooms:assignment_summary' assignment_id=assignment.id %}">
+                    {% else %}
+                        <a href="#submit_assignment" data-value="{{ assignment.id }}">
+                    {% endif %}
+                {% endfor %}
+                <div class="card assignment_card" style="width: 18rem;">
+                <div class="card-body">
+                <h5 class="card-title">{{assignment.assignment_name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Assignment posted on {{ assignment.posted_date }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Assignment due at {{ assignment.due_time }} on {{ assignment.due_date }}</h6>
+                </div>
+                </div>
+                </a>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+    <div class="modal" tabindex="-1" id="submit_assignment">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Submit Assignment</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+             <div class="modal-body">
+                  <form method="POST" class="cclass_form" id="submit_assignment_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="file" id="myfile" name="myfile">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Assignment</button>
+                  </form> 
+             </div>
+          </div>
+        </div>
+      </div>
+     
+{% endblock %}
