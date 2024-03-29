@@ -16,6 +16,7 @@ body
    background:#f0f0f6 !important;
    color: #ffffff;
    font-family: "Avenir Next", "Avenir", sans-serif;
+  
 }
 
 /* .logout_button{
@@ -87,7 +88,7 @@ color: white !important;
 
 .hamburger_current_class{
   color:white;
-  background-color: rgb(23, 70, 172);
+  background-color: rgb(108, 23, 172);
   border-radius: 10px;
   text-align: center;
   margin-left: 2%;
@@ -122,3 +123,28 @@ color: white !important;
   height: 10vh;
   width: 18vw;
 }
+.navbar1 {
+  margin: 30px;
+  border: none;
+  color:#7f00ff;
+  letter-spacing: 0;
+  transition: letter-spacing 0.3s ease, font-weight 0.3s ease; /* Added transition for smoother effect */
+}
+
+.navbar1:hover,
+.navbar1:active {
+  letter-spacing: 5px;
+  font-weight: bold;
+}
+
+
+
+
+
+.navbar1:hover:before {
+  bottom: auto;
+  top: 0;
+  width: 70%;
+
+}
+

@@ -33,7 +33,7 @@
           </li>
 
           <li class="nav-item active">
-            <a class="nav-link mybtn myinfo" href="{% url 'logout' %}">Logout<span class="sr-only"></span></a>
+            <a class="nav-link mybtn myinfo" href="{% url 'logout' %}" >Logout<span class="sr-only"></span></a>
           </li>
           
         </ul>
@@ -53,7 +53,7 @@
         <form class="login-form" method="POST">
             {% csrf_token %}
             {{form|crispy}}
-            <button type='submit'>
+            <button type='submit' >
                 Create Assignment
             </button>
         </form>
