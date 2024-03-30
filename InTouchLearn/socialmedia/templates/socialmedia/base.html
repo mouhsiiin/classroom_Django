@@ -125,16 +125,6 @@
             <div class="main-middle">
                 <div class="middle-container">
 
-
-                    <!-- .........Post Input.......... -->
-                    <form class="add-post input-post">
-                        <div class="profile-picture" id="my-profile-picture">
-                            <img src="{{ user.profile_picture.url }}" alt="">
-                        </div>
-                        <input type="text" placeholder="What's on your mind ?" id="add-post">
-                        <input type="submit" value="post" class="btn btn-primary">
-                    </form>
-
                     <!--.............. Feed Aria Start............... -->
                     <div class="feeds">
                         {% block feeds %}
@@ -165,7 +155,7 @@
                     <img src="{{ user.profile_picture.url }}">
                 </div>
                 <label for="profile-upload" class="btn btn-primary btn-lg">Update Profile Picture</label>
-                <input type="file" accept="image/jpg, image/png, image/jpeg" id="profile-upload">
+                <input type="file" accept="image/jpg, image/png, image/jpeg" id="profile-upload" data-csrf="{{csrf_token}}">
                 <a href="{% url 'socialmedia:profile' user.username %}" class="btn btn-primary btn-lg"
                     id="editProfile">Profile</a>
                 <a href="{% url 'logout' %}" class="btn btn-primary btn-lg" id="logoutbtn">Log Out</a>
@@ -266,40 +256,16 @@
     <script src="{% static 'socialmedia/css/Swiper/swiper-bundle.min.js' %}"></script>
 
     <!-- ...................Custom JS Link.................. -->
-    <script src="{% static 'socialmedia/js/Script.js' %}"></script>
     <script>
         document.querySelector('.logo').addEventListener('click', () => {
             window.location.href = '/';
         });
-
-
-        ProfileUploader.addEventListener('change', () => {
-            const formData = new FormData();
-            formData.append('profile_picture', ProfileUploader.files[0]);
-
-            fetch('social/picture_upload', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                },
-                body: formData,
-            })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    }
-                    else if (response.status === 400) {
-                        alert('Invalid file type');
-                    }
-                    else {
-                        alert('An error occurred');
-                    }
-                });
-        });
-
-
-    </script>
-
-</body>
-
-</html>
+        
+        
+     
+        </script>
+        <script src="{% static 'socialmedia/js/Script.js' %}"></script>
+        
+    </body>
+    
+    </html>

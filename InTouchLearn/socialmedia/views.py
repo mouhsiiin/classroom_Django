@@ -32,29 +32,24 @@ def editprofile(request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         bio = request.POST.get('bio')
-        about_me = request.POST.get('about_me')
-        # Mettre à jour les champs du profil utilisateur
-        user.username = username
-        user.first_name = first_name
-        user.last_name = last_name
-        user.bio = bio
-        user.about_me = about_me
-       
-        # Vérifier si une nouvelle image de profil a été envoyée
-        if request.FILES.get('profile_picture'):
-            profile_picture = request.FILES['profile_picture']
-            # Mettre à jour l'image de profil de l'utilisateur
-            print(profile_picture)
+        profile_picture = request.FILES.get('profile_picture')
+
+        if username:
+            user.username = username
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        if bio:
+            user.bio = bio
+        if profile_picture:
             user.profile_picture = profile_picture
 
-        # Enregistrer les modifications dans la base de données
         user.save()
+        return redirect('socialmedia:profile', username=user.username)
+    else:
+        return render(request, 'socialmedia/editprofile.html')
         
-        # Rediriger vers la page de profil ou une autre vue appropriée
-        return redirect('socialmedia:post-list')  # Assurez-vous que 'post-list' correspond à l'URL de votre vue de liste de publications
-         
-    # Si la méthode de la requête n'est pas POST, afficher le formulaire d'édition de profil
-    return render(request, "socialmedia/editprofile.html", {})
 
 
 

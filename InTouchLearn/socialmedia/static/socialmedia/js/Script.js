@@ -10,7 +10,6 @@ window.addEventListener('scroll',()=>{
     document.querySelector('.profile-popup').style.display='none'
     document.querySelector('.add-post-popup').style.display='none'
     document.querySelector('.theme-customize').style.display='none'
-    document.querySelector('.notification-box').style.display='none'
 });
 
 
@@ -32,46 +31,6 @@ menuItem.forEach(item=>{
         notificationBox.style.display='none'
     })
 });
-
-// tailwind.config.js
-
-module.exports = {
-    // Autres configurations Tailwind CSS
-    plugins: [
-      require('@tailwindcss/typography'),
-      // D'autres plugins peuvent être ajoutés ici
-    ],
-  };
-  
-
-
-
-// ........................Notifcation................
-
-let notificationMenu = document.querySelector('#Notify-box');
-let notfyCounter1 = document.querySelector('#ntCounter1');
-
-notificationMenu.addEventListener('click',()=>{
-    notificationBox.style.display='block'
-    notfyCounter1.style.display='none'
-});
-
-
-
-
-// .....................Message...................
-let messageMenu = document.querySelector('#messageMenu');
-let messageBox = document.querySelector('.messages');
-let notfyCounter2 = document.querySelector('#notfyCoutner2');
-
-messageMenu.addEventListener('click',()=>{
-    notfyCounter2.style.display='none';
-    messageBox.classList.toggle('boxshadow1');
-    setTimeout(() => {
-        messageBox.classList.remove('boxshadow1');
-    }, 3000);
-});
-
 
 
 
@@ -106,11 +65,14 @@ let themeCustomizePopup = document.querySelector('.theme-customize');
 let myProfilePictureImg = document.querySelectorAll('#my-profile-picture img');
 let ProfileUploader = document.querySelector('#profile-upload');
 
-AllMyProfilePicture.forEach(AllProfile => {
-    AllProfile.addEventListener('click',()=>{
+
+
+AllMyProfilePicture.forEach(myProfilePicture=>{
+    myProfilePicture.addEventListener('click',()=>{
         profilePopup.style.display='flex'
-    })   
+    })
 });
+
 
 document.querySelectorAll('.close').forEach(AllCloser=>{
     AllCloser.addEventListener('click',()=>{
@@ -122,26 +84,30 @@ document.querySelectorAll('.close').forEach(AllCloser=>{
 
 
 ProfileUploader.addEventListener('change', () => {
-    let file = document.querySelector('#profile-upload').files[0];
-    let formData = new FormData();
-    formData.append('profile_picture', file);
-
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', '/update_profile_picture/', true);  // Assurez-vous que l'URL correspond à celle de votre vue Django
-    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // La requête AJAX a réussi
-            // Vous pouvez mettre à jour l'image de profil sur la page sans recharger la page
-            let profilePictureUrl = JSON.parse(xhr.responseText).profile_picture_url;
-        }
-    };
-    xhr.send(formData);
-});
-
-
-
+    const formData = new FormData();
+    formData.append('profile_picture', ProfileUploader.files[0]);
+    
+    fetch('social/picture_upload', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': ProfileUploader.dataset.csrf,
+        },
+        body: formData,
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            }
+            else if (response.status === 400) {
+                alert('Invalid file type');
+            }
+            else {
+                alert('An error occurred');
+            }
+        });
+    });
+    
+    
 
 
 //.................Start Add post Popup................
