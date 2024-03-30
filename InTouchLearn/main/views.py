@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.conf import settings
 
-from main.models import virtual_class, User
+from main.models import  User
 import string
 import random
 from django.contrib.auth.tokens import default_token_generator
@@ -71,13 +71,26 @@ def register(request):
         username = request.POST.get("username")
         email = request.POST.get("email")
         password = request.POST.get("password")
+        role = request.POST.get("role")
 
         if not username:
             return render(request, "main/register.html", {"error": "Username required."})
         if not email:
             return render(request, "main/register.html", {"error": "Email required."})
+        
+        if role == "student" and email.split("@")[1] != "etu.uae.ac.ma" :
+            return render(request, "main/register.html", {"error": "Email must be a student email."})
+        if role == "teacher" and email.split("@")[1] != "uae.ac.ma" :
+            return render(request, "main/register.html", {"error": "Email must be a teacher email."})
+        
         if not password:
             return render(request, "main/register.html", {"error": "Password required."})
+        if User.objects.filter(email=email).exists():
+            return render(request, "main/register.html", {"error": "Email already exists."})
+        if User.objects.filter(username=username).exists():
+            return render(request, "main/register.html", {"error": "Username already exists."})
+        if len(password) < 8:
+            return render(request, "main/register.html", {"error": "Password must be at least 8 characters long."})
 
         # Use make_password to securely hash the password
         hashed_password = make_password(password)
@@ -85,7 +98,8 @@ def register(request):
         new_user = User(
             username=username,
             email=email,
-            password=hashed_password
+            password=hashed_password,
+        
         )
         new_user.save()
 

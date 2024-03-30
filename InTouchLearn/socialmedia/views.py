@@ -71,7 +71,7 @@ def profile(request, username):
     }
 
     context = {
-        'user': userInformation,
+        'profile': userInformation,
     }
     return render(request, 'socialmedia/profile.html', context)
 
@@ -303,3 +303,62 @@ def comment_reply_view(request, post_pk, pk):
         'parent_comment': parent_comment,
     }
     return render(request, 'social/comment_reply.html', context)
+
+
+@login_required
+def picture_upload(request):
+    user = User.objects.get(id=request.session["user_id"])
+    if request.method == 'POST':
+        #get the uploaded image from the request body
+        user.profile_picture = request.FILES['profile_picture']
+        user.save()
+        
+        return JsonResponse({'profile_picture': user.profile_picture.url})
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+    
+
+#view for getting comments as json
+@login_required
+def get_comments(request, post_pk):
+    post = get_object_or_404(Post, pk=post_pk)
+    comments = Comment.objects.filter(post=post).order_by('-created_on')
+    comments_list = []
+    for comment in comments:
+        comments_list.append({
+            'id': comment.id,
+            'author': comment.author.username,
+            'content': comment.content,
+            'created_on': comment.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+            'likes': comment.likes.all().count(),
+            'dislikes': comment.dislikes.all().count(),
+            'replies': [{'author': reply.author.username, 'content': reply.content} for reply in comment.replies.all()]
+        })
+
+    return JsonResponse({'comments': comments_list})
+
+#view for adding comments
+@login_required
+def add_comment(request, post_pk):
+    post = get_object_or_404(Post, pk=post_pk)
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            comment = Comment.objects.create(
+                author=request.user,
+                post=post,
+                content=content
+            )
+            return JsonResponse({
+                'id': comment.id,
+                'author': comment.author.username,
+                'content': comment.content,
+                'created_on': comment.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+                'likes': comment.likes.all().count(),
+                'dislikes': comment.dislikes.all().count(),
+                'replies': []
+            })
+        else:
+            return JsonResponse({'error': 'Invalid request'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)

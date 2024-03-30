@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeO49Z2XlKOYrHtfX7MCBnuHBHK0o8f/0S6wk+nZ7" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'socialmedia/css/chat.css' %}">
+
+</head>
+<body>
+
+    <div class="big-container">
+        <div class="cnv-container w-100 h-100">
+            <div class="row w-100 h-100">
+                <div class="sidebar w-100">
+                    {% for conversation in conversations %}
+                    <div class="conversation" data-conversationId="{{ conversation.pk }}">
+                        <div class="conversation-avatar">
+                            <img src="{{ conversation.user2.profile_picture.url }}" alt="profile">
+                        </div>
+                        <span>{{ conversation.user2 }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="msg-container">
+            <div class="chat-header">
+                <h3>Chat</h3>
+                <div>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#createConversationModal"><i class="fas fa-plus">Add a conversation</i></button>
+                </div>
+            </div>
+            <div class="chat-body">
+                <h1>
+                    Select a conversation
+                </h1>
+                <div class="msg-input">
+                    <form action="" method="post">
+                        <input type="text" name="message" placeholder="Type a message">
+                        <input type="submit" value="Send" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Conversation Modal -->
+    <div class="modal fade" id="createConversationModal" tabindex="-1" role="dialog" aria-labelledby="createConversationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createConversationModalLabel">Create Conversation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="recipient">Recipient</label>
+                            <input type="text" class="form-control" id="recipient" name="recipient" placeholder="Recipient">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const conversations = document.querySelectorAll('.conversation');
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+        
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+
+        $(document).ready(function() {
+            $('.conversation').click(function() {
+                $(this).addClass('active').siblings().removeClass('active');
+            });
+        });
+
+    
+
+        //creating a conversation / thread
+        $(document).ready(function() {
+            $('#createConversationModal form').submit(function(e) {
+                console.log('submitting');
+                e.preventDefault();
+                var recipient = $('#recipient').val();
+                fetch('/social/create_conversation/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        recipient: recipient
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        $('#createConversationModal').modal('hide');
+                        location.reload();
+                    }
+                });
+            });
+        });
+
+        conversations.forEach(conversation => {
+            conversation.addEventListener('click', () => {
+                conversation.classList.add('active');
+                conversations.forEach(c => {
+                    if (c !== conversation) {
+                        c.classList.remove('active');
+                    }
+                });
+
+                //fetch messages
+             
+                fetch('/social/get_messages/', {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'conversation_id': conversation.dataset.conversationid
+
+                }})
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        const chatBody = document.querySelector('.chat-body');
+                        chatBody.innerHTML = '';
+                        data.messages.forEach(message => {
+                            const div = document.createElement('div');
+                            div.classList.add('message');
+                            div.classList.add(message.sender === 'user' ? 'sent' : 'received');
+                            div.innerHTML = `
+                                <div class="message-avatar">${message.sender[0]}</div>
+                                <div class="message-body">${message.body}</div>
+                            `;
+                            chatBody.appendChild(div);
+                        });
+                    }
+                });
+            });
+        });
+
+        //sending a message
+        const msgInput = document.querySelector('.msg-input');
+        msgInput.addEventListener('submit', e => {
+            e.preventDefault();
+            const message = msgInput.querySelector('input[name="message"]').value;
+            fetch('/social/send_message/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    conversation_id: document.querySelector('.conversation.active').dataset.conversationId,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    msgInput.querySelector('input[name="message"]').value = '';
+                    const div = document.createElement('div');
+                    div.classList.add('message');
+                    div.classList.add('sent');
+                    div.innerHTML = `
+                        <div class="message-avatar">{{ conversation.user2.profile_picture.url }}</div>
+                        <div class="message-body">${message}</div>
+                    `;
+                    document.querySelector('.chat-body').appendChild(div);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

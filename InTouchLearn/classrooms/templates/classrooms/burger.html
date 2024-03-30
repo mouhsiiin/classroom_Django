@@ -1,0 +1,160 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'classrooms/css/burger.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'classrooms/css/card.css' %}"> 
+    {% block head %}
+    {% endblock %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+  </head>
+<body class="container-fluid" >
+  <div>
+    <nav class="navbar navbar-expand-lg navbar-light navbar_custom">
+      <a class="navbar-brand" href="#" style="font-size:250% !important; color:#7f00ff !important; margin-left: 7%; margin-right: 30%"><b>Classroom</b></a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <button  type="button" data-toggle="modal" data-target="#add_class" class="navbar1" >Create Class</button>
+            </li>
+            <li class="nav-item active"  >
+              <button  type="button" data-toggle="modal" data-target="#join_class" class="navbar1" >Join Class</button>
+            </li>
+            <li class="nav-item active">
+              <a href="{% url 'logout' %}" type="button"  class="navbar1" style=" text-decoration: none;">Logout</a>
+            </li>
+            <li class="nav-item active">
+              <div class="image_cropper" >
+                <img src="{{ user.profile_picture.url }}" alt="Profile Pic" class="profile_pic_style" >
+              </div>
+            </li>
+          </ul>
+      </div>
+    </nav>
+    <br>
+    <div class="modal" tabindex="-1" id="add_class">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Create Class</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+           <div class="modal-body">
+                <form method="POST" class="cclass_form" id="create_class_form">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="class_name" placeholder="class_name">
+                  </div>
+                  <div class="form-group">
+                    <textarea class="form-control" id="section" placeholder="section"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <input type="file" class="form-control" id="students_emails" placeholder="emails list of the sudents">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form> 
+           </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal" tabindex="-1" id="join_class">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Join Class</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+           <div class="modal-body">
+                <form method="POST" class="cclass_form" id="join_class_form">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="class_code" placeholder="class_code">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form> 
+           </div>
+        </div>
+      </div>
+    </div>
+
+
+      {% block burger %}
+      {% endblock %}
+    </div>
+    </body>
+
+    <script>
+      $('#create_class_form').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'/classrooms/create_class_request/',
+            data:{
+                class_name:$('#class_name').val(),
+                section:$('#section').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json){
+                document.getElementById("create_class_form").reset();
+                $(".posts").prepend('<div class="col-md-6">'+
+                    '<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">' +
+                        '<div class="col p-4 d-flex flex-column position-static">' +
+                            '<h3 class="mb-0">' + json.class_name + '</h3>' +
+                            '<p class="mb-auto">' + json.section + '</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' 
+                )
+                window.location.href='http://127.0.0.1:8000/home/';
+                window.location.reload();
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+      });
+
+      $('#join_class_form').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'/classrooms/join_class_request/',
+            data:{
+                class_name:$('#class_name').val(),
+                class_code:$('#class_code').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json){
+                document.getElementById("create_class_form").reset();
+                $(".posts").prepend('<div class="col-md-6">'+
+                    '<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">' +
+                        '<div class="col p-4 d-flex flex-column position-static">' +
+                            '<h3 class="mb-0">' + json.class_code + '</h3>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' 
+                )
+                window.location.href='http://127.0.0.1:8000/home/';
+                window.location.reload();
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+      });
+    </script>
+
+</html>

@@ -1,0 +1,66 @@
+{% extends 'classrooms/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+   <link rel="stylesheet" type="text/css" href="{% static 'classrooms/css/form.css' %}">  
+{% endblock %}
+
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light navbar_custom">
+    <nav role="navigation">
+        <div id="menuToggle">
+          <input type="checkbox" />
+          <span></span>
+          <span></span>
+          <span></span>
+          <ul id="menu">
+            {% if mappings %}
+                {% for mapping in mappings %}
+                    <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}"><li>{{mapping.classroom_id.classroom_name}}</li></a>
+                {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    <a class="navbar-brand" href="#" style="font-size:250% !important; color:#2e45c7 !important; margin-left: 7%; margin-right: 30%"><b>Classroom</b></a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          
+          <li class="nav-item">
+            <a class="nav-link mybtn myinfo" href="{% url 'classrooms:home' %}">Home</a>
+          </li>
+
+          <li class="nav-item active">
+            <a class="nav-link mybtn myinfo" href="{% url 'logout' %}" >Logout<span class="sr-only"></span></a>
+          </li>
+          
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content_left %}
+    <div class="login-page">
+        <img src="{% static 'classrooms/images/boy_and_girl.svg' %}" alt="Boy and Girl" width="400" height="400">
+    </div>
+{% endblock %}
+
+{% block content_right %}
+    <div class="login-page">
+        <div class="myform">
+        <form class="login-form" method="POST">
+            {% csrf_token %}
+            {{form|crispy}}
+            <button type='submit' >
+                Create Assignment
+            </button>
+        </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block hamburger %}
+    
+{% endblock %}

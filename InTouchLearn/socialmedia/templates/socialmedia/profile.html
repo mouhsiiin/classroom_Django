@@ -1,5 +1,14 @@
 {% extends 'socialmedia/base.html' %}
 
+{% load static %}
+
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'socialmedia/css/profile.css' %}">
+{% endblock %}
+
+
+
 
 {% block feeds %}
     

@@ -9,7 +9,6 @@ class Post(models.Model):
     body = models.TextField()
     image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True)
     video = models.FileField(upload_to='uploads/post_videos', blank=True, null=True)
-   
     created_on = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='likes')
@@ -32,4 +31,27 @@ class Comment(models.Model):
      if self.parent is None:
         return True
     
-     return False    
+     return False  
+    
+
+class conversation(models.Model):
+    user1 = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user1')
+    user2 = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user2')
+    created_on = models.DateTimeField(default=timezone.now)
+    @property
+    def messages(self):
+        return message.objects.filter(conversation=self).order_by('created_on').all()
+    
+class message(models.Model):
+    conversation = models.ForeignKey('conversation', on_delete=models.CASCADE)
+    message = models.TextField()
+    image = models.ImageField(upload_to='uploads/message_photos', blank=True, null=True)
+    created_on = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    seen = models.BooleanField(default=False)
+    @property
+    def is_sender(self):
+        if self.author == self.conversation.user1:
+            return True
+        return False
+

@@ -40,7 +40,7 @@
     </div>
 
     {% for post in post_list %}
-    <div class="feed">
+    <div class="feed" id="{{post.pk}}">
         <div class="feed-top">
             <div class="user">
                 <div class="profile-picture">
@@ -77,7 +77,7 @@
         </div>
         <div class="action-button">
                 <div class="interaction-button">
-                    <button class="like-button" data-post-id="{{ post.pk }}" class="btn btn-primary">
+                    <button  data-post-id="{{ post.pk }}" class="btn btn-primary like-button">
                         {% if user in post.likes.all %}
                             <i class="fas fa-thumbs-up"> </i>
                         {% else %}
@@ -85,7 +85,7 @@
                         {% endif %}
                         <span id="like-count">{{ post.likes.all.count }}</span>
                     </button>
-                    <button class="dislike-button" data-post-id="{{ post.pk }}" class="btn btn-primary">
+                    <button  data-post-id="{{ post.pk }}" class="btn btn-primary dislike-button">
                         {% if user in post.dislikes.all %}
                             <i class="fas fa-thumbs-down"> </i>
                         {% else %}
@@ -94,11 +94,21 @@
                         <span id="dislike-count">{{ post.dislikes.all.count }}</span>
                     </button>
                 </div>
+                <div class="comments">
+                    <button class="btn btn-primary com-btn">
+                        <i class="far fa-comment-alt"></i>
+                        <span>Comment</span>
+                    </button>
+                </div>
         </div>
         <div class="bookmark">
             <i class="fa fa-bookmark"></i>
         </div>
+        <div class="comments-container">
+
+        </div>
     </div>
+
 
     {% endfor %}
     <div id="load-more-container">
@@ -127,9 +137,11 @@
 
     // handel like and dislike post
     document.addEventListener('DOMContentLoaded', function(){
-        console.log('js is working');
         const likeBtn = document.querySelectorAll('.like-button');
         const dislikeBtn = document.querySelectorAll('.dislike-button');
+        const commentBtn = document.querySelectorAll('.com-btn');
+        
+
         
         likeBtn.forEach(btn => {
             btn.addEventListener('click', function(){
@@ -189,7 +201,31 @@
 
        
     });
-    
+
+    //display comments as a dropdown
+    commentBtn.forEach(btn => {
+        btn.addEventListener('click', function(){
+            const postId = btn.getAttribute('data-post-id');
+            console.log(postId);
+
+            fetch(`/social/post/${postId}/comments`, {
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'}})
+            .then(response => {
+                if (response.ok){
+                    document.querySelector('#'+postId+' .comments-container').innerHTML = response.text();
+                }
+            })
+            .then(data => {
+                console.log(data);
+            });
+            
+        });
+    });
+
+
 
 </script>
 
