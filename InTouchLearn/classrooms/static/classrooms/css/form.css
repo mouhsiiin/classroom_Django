@@ -13,7 +13,7 @@
 .myform {
   position: relative;
   z-index: 1;
-  background: #2e45c7;
+  background: #b3bef8;
   max-width: 660px;
   margin: 0 auto 100px;
   padding: 45px;
@@ -43,7 +43,7 @@
   text-align: center;
   border: 0;
   padding: 15px;
-  color: #2e45c7;
+  color: #657af4;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
