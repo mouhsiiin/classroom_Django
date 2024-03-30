@@ -11,11 +11,53 @@ from django.core.paginator import Paginator
 
 from django.http import JsonResponse, HttpResponseBadRequest
 
+from django.shortcuts import redirect
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 
 @login_required
 def editprofile(request):
+    if request.method == 'POST':
+        # Récupérer l'utilisateur actuellement connecté
+        user = request.user
+        
+        # Récupérer les données envoyées dans le formulaire
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        bio = request.POST.get('bio')
+        about_me = request.POST.get('about_me')
+        # Mettre à jour les champs du profil utilisateur
+        user.username = username
+        user.first_name = first_name
+        user.last_name = last_name
+        user.bio = bio
+        user.about_me = about_me
+       
+        # Vérifier si une nouvelle image de profil a été envoyée
+        if request.FILES.get('profile_picture'):
+            profile_picture = request.FILES['profile_picture']
+            # Mettre à jour l'image de profil de l'utilisateur
+            print(profile_picture)
+            user.profile_picture = profile_picture
+
+        # Enregistrer les modifications dans la base de données
+        user.save()
+        
+        # Rediriger vers la page de profil ou une autre vue appropriée
+        return redirect('socialmedia:post-list')  # Assurez-vous que 'post-list' correspond à l'URL de votre vue de liste de publications
+         
+    # Si la méthode de la requête n'est pas POST, afficher le formulaire d'édition de profil
     return render(request, "socialmedia/editprofile.html", {})
+
+
+
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)
