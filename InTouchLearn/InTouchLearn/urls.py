@@ -23,6 +23,7 @@ urlpatterns = [
     path("", include("main.urls")),
     path("classrooms/", include("classrooms.urls", namespace="classrooms")),
     path("social/", include("socialmedia.urls", namespace="socialmedia")),
+   
 ]
 
 

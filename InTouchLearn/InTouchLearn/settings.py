@@ -67,6 +67,8 @@ INSTALLED_APPS = [
     'storages',
     'crispy_forms',
     'crispy_bootstrap4',
+    'videoconference_app',
+    
     
     
 ]
@@ -90,6 +92,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, "socialmedia", "templates"),
             os.path.join(BASE_DIR, "main", "templates"),
             os.path.join(BASE_DIR, "classrooms", "templates"),
+            
             os.path.join(BASE_DIR, "templates"),
         ],
         "APP_DIRS": True,
@@ -105,6 +108,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "InTouchLearn.wsgi.application"
+
 
 
 # Database
@@ -157,6 +161,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "socialmedia", "static"),
     os.path.join(BASE_DIR, "main", "static"),
     os.path.join(BASE_DIR, "classrooms", "static"),
+    
+    
     os.path.join(BASE_DIR, "static"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")

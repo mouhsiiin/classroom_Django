@@ -39,17 +39,17 @@ font-size: 16px;
 cursor: pointer;
 padding-left:40px;
 padding-right:40px;
-margin-top: 1%;
-margin-left: 20px;
+margin-top: 5%;
+margin-left: 60px;
 }
 
 .myinfo {
-border-color: #2e45c7 !important;
-color: #2e45c7 !important;
+border-color: #7f00ff !important;
+color: #8f2ec7 !important;
 }
 
 .myinfo:hover {
-background: #2e45c7 !important;
+background:#7f00ff !important;
 color: white !important;
 }
  
@@ -58,7 +58,7 @@ color: white !important;
   float:left !important;
   padding-left:80px;
   position: relative !important;
-  color: #2e45c7 !important;
+  color: #8a2ec7 !important;
   margin-right: 46%;
 }
 
@@ -87,7 +87,7 @@ color: white !important;
 
 .hamburger_current_class{
   color:white;
-  background-color: rgb(23, 70, 172);
+  background-color: rgb(120, 23, 172);
   border-radius: 10px;
   text-align: center;
   margin-left: 2%;
