@@ -1,4 +1,3 @@
-
 {% extends 'socialmedia/base.html' %}
 
 {% load static %}
@@ -12,27 +11,41 @@
 
 
 {% block feeds %}
-  <div class="profile-section">
-    <div class="profile-header">
-      <img src="{{ user.profile_picture.url }}" alt="{{ user.first_name }} {{ user.last_name }}" class="profile-picture">
-      <div class="profile-info">
-        <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-        <p>{{ user.email }}</p>
-      </div>
-      {% if user.cv %}
-        
-      {% endif %}
-      <button class="message-btn">Message</button>
-    </div>
-    <div class="posts-section">
-      <h3>Posts</h3>
-      {% for post in user_posts %}
-        <div class="post">
-          <h4>{{ post.title }}</h4>
-          <p>{{ post.content }}</p>
-          <p class="post-date">{{ post.created_at }}</p>
+    
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+
+    <section class="bg-white m-4 rounded-3xl ">
+        <div class="container mx-auto py-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/3 text-center mb-4 md:mb-0">
+                    <img src="{{ user.profile_picture.url }}" alt="Photo de profil" class="w-32 h-32 rounded-full mx-auto">
+                </div>
+                <div class="md:w-2/3">
+                    <h2 class="text-center md:text-left text-2xl font-bold mb-2">{{ user.first_name }} {{ user.last_name }}</h2>
+                    <p class="text-center md:text-left text-lg mb-2">{{ user.position }}</p>
+                    <ul class="mb-4">
+                        <li class="mb-2 flex items-center">
+                            <span class="font-bold mr-2">Nom d'utilisateur :</span>
+                            <span>{{ user.username }}</span>
+                        </li>
+                        <li class="mb-2 flex items-center">
+                            <span class="font-bold mr-2">Email :</span>
+                            <a href="mailto:{{ user.email }}" class="text-purple-700 hover:underline" data-cfemail="b4d1d0ddc0dcf4d9d5ddd89ad7dbd9">{{ user.email }}</a>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="font-bold mr-2">Bio:</span>
+                            <span class="text-gray-700">{{ user.bio }}</span>
+                        </li>
+                    </ul>
+                    <div class="text-center md:text-left">
+                        <a href="{% url 'socialmedia:editprofile' %}" class="btn-edit bg-purple-700 text-white px-4 py-2 rounded-md hover:bg-purple-800">Edit profil</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      {% endfor %}
-    </div>
-  </div>
-{% endblock %}
+    </section>
+
+  
+
+    {% endblock %}

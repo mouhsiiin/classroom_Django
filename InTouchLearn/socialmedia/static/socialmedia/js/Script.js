@@ -33,7 +33,16 @@ menuItem.forEach(item=>{
     })
 });
 
+// tailwind.config.js
 
+module.exports = {
+    // Autres configurations Tailwind CSS
+    plugins: [
+      require('@tailwindcss/typography'),
+      // D'autres plugins peuvent être ajoutés ici
+    ],
+  };
+  
 
 
 
@@ -109,6 +118,26 @@ document.querySelectorAll('.close').forEach(AllCloser=>{
         addPostPopup.style.display='none'
         themeCustomizePopup.style.display='none'
     })
+});
+
+
+ProfileUploader.addEventListener('change', () => {
+    let file = document.querySelector('#profile-upload').files[0];
+    let formData = new FormData();
+    formData.append('profile_picture', file);
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/update_profile_picture/', true);  // Assurez-vous que l'URL correspond à celle de votre vue Django
+    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // La requête AJAX a réussi
+            // Vous pouvez mettre à jour l'image de profil sur la page sans recharger la page
+            let profilePictureUrl = JSON.parse(xhr.responseText).profile_picture_url;
+        }
+    };
+    xhr.send(formData);
 });
 
 
@@ -284,3 +313,10 @@ const bgicon = ()=>{
         icon.classList.add('icon-bg');
     })
 }
+
+document.addEventListener('DOMContentLoaded',()=>{
+    console.log('loaded')
+})
+
+
+
