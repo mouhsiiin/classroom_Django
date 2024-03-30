@@ -15,7 +15,33 @@ from django.http import JsonResponse, HttpResponseBadRequest
 
 @login_required
 def editprofile(request):
-    return render(request, "socialmedia/editprofile.html", {})
+    if request.method == 'POST':
+        # Récupérer l'utilisateur actuellement connecté
+        user = request.user
+        
+        # Récupérer les données envoyées dans le formulaire
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        bio = request.POST.get('bio')
+        profile_picture = request.FILES.get('profile_picture')
+
+        if username:
+            user.username = username
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        if bio:
+            user.bio = bio
+        if profile_picture:
+            user.profile_picture = profile_picture
+
+        user.save()
+        return redirect('socialmedia:profile', username=user.username)
+    else:
+        return render(request, 'socialmedia/editprofile.html')
+        
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)

@@ -10,7 +10,6 @@ window.addEventListener('scroll',()=>{
     document.querySelector('.profile-popup').style.display='none'
     document.querySelector('.add-post-popup').style.display='none'
     document.querySelector('.theme-customize').style.display='none'
-    document.querySelector('.notification-box').style.display='none'
 });
 
 
@@ -32,37 +31,6 @@ menuItem.forEach(item=>{
         notificationBox.style.display='none'
     })
 });
-
-
-
-
-
-// ........................Notifcation................
-
-let notificationMenu = document.querySelector('#Notify-box');
-let notfyCounter1 = document.querySelector('#ntCounter1');
-
-notificationMenu.addEventListener('click',()=>{
-    notificationBox.style.display='block'
-    notfyCounter1.style.display='none'
-});
-
-
-
-
-// .....................Message...................
-let messageMenu = document.querySelector('#messageMenu');
-let messageBox = document.querySelector('.messages');
-let notfyCounter2 = document.querySelector('#notfyCoutner2');
-
-messageMenu.addEventListener('click',()=>{
-    notfyCounter2.style.display='none';
-    messageBox.classList.toggle('boxshadow1');
-    setTimeout(() => {
-        messageBox.classList.remove('boxshadow1');
-    }, 3000);
-});
-
 
 
 
@@ -97,11 +65,14 @@ let themeCustomizePopup = document.querySelector('.theme-customize');
 let myProfilePictureImg = document.querySelectorAll('#my-profile-picture img');
 let ProfileUploader = document.querySelector('#profile-upload');
 
-AllMyProfilePicture.forEach(AllProfile => {
-    AllProfile.addEventListener('click',()=>{
+
+
+AllMyProfilePicture.forEach(myProfilePicture=>{
+    myProfilePicture.addEventListener('click',()=>{
         profilePopup.style.display='flex'
-    })   
+    })
 });
+
 
 document.querySelectorAll('.close').forEach(AllCloser=>{
     AllCloser.addEventListener('click',()=>{
@@ -112,7 +83,31 @@ document.querySelectorAll('.close').forEach(AllCloser=>{
 });
 
 
-
+ProfileUploader.addEventListener('change', () => {
+    const formData = new FormData();
+    formData.append('profile_picture', ProfileUploader.files[0]);
+    
+    fetch('social/picture_upload', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': ProfileUploader.dataset.csrf,
+        },
+        body: formData,
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            }
+            else if (response.status === 400) {
+                alert('Invalid file type');
+            }
+            else {
+                alert('An error occurred');
+            }
+        });
+    });
+    
+    
 
 
 //.................Start Add post Popup................

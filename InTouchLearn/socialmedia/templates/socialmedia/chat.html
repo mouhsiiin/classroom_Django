@@ -14,19 +14,17 @@
 
     <div class="big-container">
         <div class="cnv-container w-100 h-100">
-            <div class="row w-100 h-100">
-                <div class="sidebar w-100">
+                <div class="sidebar w-100 h-100">
                     {% for conversation in conversations %}
                     <div class="conversation" data-conversationId="{{ conversation.pk }}">
                         <div class="conversation-avatar">
-                            <img src="{{ conversation.user2.profile_picture.url }}" alt="profile">
+                            <img src="{{ conversation.other_user.profile_picture.url }}" alt="profile">
                         </div>
-                        <span>{{ conversation.user2 }}</span>
+                        <span>{{ conversation.other_user.username }}</span>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-        </div>
         <div class="msg-container">
             <div class="chat-header">
                 <h3>Chat</h3>

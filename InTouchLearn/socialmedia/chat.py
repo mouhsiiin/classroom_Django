@@ -10,9 +10,28 @@ import json
 def chat(request):
     conversations = conversation.objects.filter(user1=request.user) | conversation.objects.filter(user2=request.user)
 
-    
+    conversations_list = []
+
+    for conversation_obj in conversations:
+        if conversation_obj.user1 == request.user:
+            other_user = conversation_obj.user2
+        else:
+            other_user = conversation_obj.user1
+        last_message = conversation_obj.messages.last()
+        if last_message:
+            last_message_text = last_message.text
+            last_message_time = last_message.created_on
+        else:
+            last_message_text = ''
+            last_message_time = ''
+        conversations_list.append({
+            'id': conversation_obj.id,
+            'other_user': other_user,
+            'last_message': last_message_text,
+            'last_message_time': last_message_time
+        })
     context = {
-        'conversations': conversations
+        'conversations': conversations_list
     }
     return render(request, 'socialmedia/chat.html', context)
 

@@ -199,31 +199,30 @@
             });
         });
 
-       
-    });
-
-    //display comments as a dropdown
-    commentBtn.forEach(btn => {
-        btn.addEventListener('click', function(){
-            const postId = btn.getAttribute('data-post-id');
-            console.log(postId);
-
-            fetch(`/social/post/${postId}/comments`, {
-                method: 'GET',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
-                    'Content-Type': 'application/json'}})
-            .then(response => {
-                if (response.ok){
-                    document.querySelector('#'+postId+' .comments-container').innerHTML = response.text();
-                }
-            })
-            .then(data => {
-                console.log(data);
+        commentBtn.forEach(btn => {
+            btn.addEventListener('click', function(){
+                const postId = btn.getAttribute('data-post-id');
+                console.log(postId);
+    
+                fetch(`/social/post/${postId}/comments`, {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'}})
+                .then(response => {
+                    if (response.ok){
+                        document.querySelector('#'+postId+' .comments-container').innerHTML = response.text();
+                    }
+                })
+                .then(data => {
+                    console.log(data);
+                });
+                
             });
-            
         });
-    });
+        //display comments as a dropdown
+
+    });    
 
 
 
