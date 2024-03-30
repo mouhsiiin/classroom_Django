@@ -279,3 +279,10 @@ const bgicon = ()=>{
         icon.classList.add('icon-bg');
     })
 }
+
+document.addEventListener('DOMContentLoaded',()=>{
+    console.log('loaded')
+})
+
+
+

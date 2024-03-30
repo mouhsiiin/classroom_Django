@@ -11,7 +11,15 @@ from django.core.paginator import Paginator
 
 from django.http import JsonResponse, HttpResponseBadRequest
 
+from django.shortcuts import redirect
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 
 @login_required
 def editprofile(request):
@@ -42,6 +50,9 @@ def editprofile(request):
     else:
         return render(request, 'socialmedia/editprofile.html')
         
+
+
+
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)
