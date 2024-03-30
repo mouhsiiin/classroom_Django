@@ -6,35 +6,45 @@
 
 {% block content %}
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h1>Login</h1>
-            
-                <form action="" method="post">
-                    {% csrf_token %}
+<div class="container" id="container">
 
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="text" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
+    <div class="form-container sign-in">
+        <form action="" method="post">
+            {% csrf_token %}
+            <h1>Sign In</h1>
+            <input type="text" class="form-control" id="email" name="email" required>
+            <input type="password" class="form-control" id="password" name="password" required>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+    <div class="toggle-container">
+        <div class="toggle">
 
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    <small>
-                        <a href="../register">Register</a>
-                    </small>
-                </form>
-                {% if error %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ error|first }}
-                    </div>
-                {% endif %}
+            <div class="toggle-panel toggle-right">
+                <h1>Hello, Friend!</h1>
+                <p>Register with your personal details to use all of site features</p>
+                <button class="hidden" id="register">Sign Up</button>
             </div>
         </div>
     </div>
+</div>
+
+{% if error %}
+    <div class="alert alert-danger" role="alert">
+        <strong>Oops! </strong>{{ error }}
+    </div>
+{% endif %}
+
+
+    <script>
+        const container = document.getElementById('container');
+        const registerBtn = document.getElementById('register');
+        const loginBtn = document.getElementById('login');
+    
+        registerBtn.addEventListener('click', () => {
+            window.location.href = "{% url 'register' %}";
+        });
+    
+    </script>
 
 {% endblock %}

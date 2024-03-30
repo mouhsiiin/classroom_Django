@@ -112,12 +112,6 @@ document.querySelectorAll('.close').forEach(AllCloser=>{
 });
 
 
-ProfileUploader.addEventListener('change',()=>{    
-    myProfilePictureImg.forEach(AllMyProfileImg=>{
-        AllMyProfileImg.src = URL.createObjectURL(document.querySelector('#profile-upload').files[0])
-    })
-});
-
 
 
 
@@ -290,7 +284,3 @@ const bgicon = ()=>{
         icon.classList.add('icon-bg');
     })
 }
-
-document.addEventListener('DOMContentLoaded',()=>{
-    console.log('loaded')
-})

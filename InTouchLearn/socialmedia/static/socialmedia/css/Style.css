@@ -121,14 +121,25 @@ nav .serch-bar input[type="search"]::placeholder{
     align-items: center;
     gap: 2rem;
 }
-.logo h3{
-    font-size: 1.6rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    user-select: none;  
-    color: var(--color-dark);  
+.logo{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-dark);
+    cursor: pointer;
+}
+.logo img{
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;
 }
 .logo span{
+    font-size: 1.5rem;
+    font-weight: bold;
     color: var(--color-primary);
 }
 /* .................End NavBar.................. */
