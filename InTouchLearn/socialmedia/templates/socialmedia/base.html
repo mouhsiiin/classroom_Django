@@ -74,10 +74,12 @@
                         <small class="notfy-counter" id="notfyCoutner2">3</small>
                         <h3>Message</h3>
                     </a>
+                    {% if  not user.is_enterprise %}
                     <a class="menu-item" href="/classrooms">
                         <span><img src="{% static 'socialmedia/images/svg/bookmarks.svg'%}" alt=""></span>
                         <h3>Classroom</h3>
                     </a>
+                    {% endif %}
                     <a class="menu-item" id="theme">
                         <span><img src="{% static 'socialmedia/images/svg/palette.svg'%}" alt=""></span>
                         <h3>Theme</h3>

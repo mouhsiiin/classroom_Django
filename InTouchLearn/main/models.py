@@ -24,3 +24,6 @@ class User(AbstractUser):
     
     def is_teacher(self):
         return self.role == 'teacher'
+
+    def is_enterprise(self):
+        return self.role == 'enterprise'

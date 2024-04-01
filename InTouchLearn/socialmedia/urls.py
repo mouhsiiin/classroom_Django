@@ -2,12 +2,13 @@ from django.urls import path
 from .views import (
     post_list_view, post_detail_view, post_edit_view, post_delete_view,
     add_like, add_dislike, add_comment_like, add_comment_dislike,
-    comment_reply_view, editprofile, profile, picture_upload, add_comment, get_comments, search
+    comment_reply_view, editprofile, profile, picture_upload, add_comment, get_comments, search, landing
 )
 from .chat import chat, create_conversation, send_message, get_messages
 
 app_name = 'socialmedia'
 urlpatterns = [
+    path('landing/', landing, name='landing'),
     path('', post_list_view, name='post-list'),
     path('post/<int:pk>/', post_detail_view, name='post-detail'),
     path('post/edit/<int:pk>/', post_edit_view, name='post-edit'),

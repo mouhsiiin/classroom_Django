@@ -17,7 +17,11 @@ from django.contrib.auth.decorators import login_required
 
 
 
-
+def home(request):
+    #if the user is authenticated redirect him to the post list
+    if request.user.is_authenticated:
+        return redirect("socialmedia:post-list")
+    return redirect("socialmedia:landing")
 
 def login(request):
     error = None
@@ -49,7 +53,7 @@ def login(request):
                     print("User loging in")
                     auth_login(request, user)
                     print("User loged in")
-                    return redirect("post-list")
+                    return redirect("socialmedia:post-list")
                 else:
                     messages.error(request, "Please verify your email to login.")
             else:
