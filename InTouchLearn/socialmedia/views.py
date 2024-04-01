@@ -50,7 +50,8 @@ def editprofile(request):
     else:
         return render(request, 'socialmedia/editprofile.html')
         
-
+def landing(request):
+    return render(request, 'socialmedia/landing.html')
 
 
 

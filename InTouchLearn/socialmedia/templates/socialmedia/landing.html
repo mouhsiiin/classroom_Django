@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'socialmedia/css/Style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+    
+      <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+<!-- END FONTS -->
+
+    <title>Academy Link</title>
+   
+</head>
+<body>
+
+    <!-- ------------------ -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="{% static 'socialmedia/images/logo.svg' %}" alt="">
+                <span>Acadimy</span>
+            </div>
+            <!-- login/signup btn -->
+            <div class="login-signup">
+                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+            </div>
+        </div>
+    </nav>
+    <!-- ------------------------ -->
+
+    <section class="bg-gray-800 py-20">
+        <div class="container mx-auto text-center m-20">
+          <h2 class="text-white text-5xl mb-8">
+            Connect with Your Future Today
+          </h2>
+          <p class="text-gray-300 mb-12">
+            Academy Link is the social media platform designed to help college
+            students bridge the gap between the classroom and the professional
+            world.
+          </p>
+          <a
+            href="#"
+            class="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700"
+            >Get Started</a
+          >
+        </div>
+      </section>
+
+      <!-- ---------------- -->
+
+      <main class="container mx-auto py-16">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+          <div class="md:w-1/2">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Connect with your peers and professionals</h1>
+            <p class="text-gray-600 mb-8">CollegeConnect is a social media platform designed specifically for college students, with a built-in classroom application to help you integrate into the professional world.</p>
+            <a href="#" class="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700">Get Started</a>
+          </div>
+          <div class="md:w-1/2">
+            <img src="https://via.placeholder.com/500x400" alt="Illustration" class="mx-auto">
+          </div>
+        </div>
+        <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="md:w-1/2">
+                <img src="https://via.placeholder.com/500x400" alt="Illustration" class="mx-auto">
+            </div>
+          <div class="md:w-1/2">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Connect with your peers and professionals</h1>
+            <p class="text-gray-600 mb-8">CollegeConnect is a social media platform designed specifically for college students, with a built-in classroom application to help you integrate into the professional world.</p>
+            <a href="#" class="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700">Get Started</a>
+          </div>
+        </div>
+      </main>
+
+  
+      <!-- Features Section -->
+
+      <section class="py-20">
+        <div class="container mx-auto">
+          <h3 class="text-center text-3xl mb-12">Features</h3>
+          <div class="grid grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl mb-4">Network with Professionals</h4>
+              <p class="text-gray-600">
+                Connect with industry leaders and alumni in your field.
+              </p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl mb-4">Find Internship Opportunities</h4>
+              <p class="text-gray-600">
+                Discover and apply for internships relevant to your studies.
+              </p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h4 class="text-xl mb-4">Collaborate with Classmates</h4>
+              <p class="text-gray-600">
+                Work together on projects and share ideas in a dedicated space.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- statics -->
+
+      <div class="w-full flex items-center justify-center">
+        <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img class="w-full h-64 object-cover" src="path/to/your/image.jpg" alt="Card Image">
+            <div class="p-6">
+                    <p class="text-gray-600">Serving Over</p>
+                    <h2 data-count="347" class="text-2xl font-bold">0</h2>
+                    <p class="text-gray-600">requests</p>
+                </div>
+            </div>
+           
+        </div>
+        <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img class="w-full h-64 object-cover" src="path/to/your/image.jpg" alt="Card Image">
+            <div class="p-6">
+                    <p class="text-gray-600">Serving Over</p>
+                    <h2 data-count="347" class="text-2xl font-bold">0</h2>
+                    <p class="text-gray-600">requests</p>
+                </div>
+            </div>
+           
+        </div>
+        <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img class="w-full h-64 object-cover" src="path/to/your/image.jpg" alt="Card Image">
+            <div class="p-6">
+                    <p class="text-gray-600">Serving Over</p>
+                    <h2 data-count="347" class="text-2xl font-bold">0</h2>
+                    <p class="text-gray-600">requests</p>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+    
+      <!-- Footer -->
+      <footer class="bg-gray-900 py-8">
+        <div class="container mx-auto text-center">
+          <p class="text-white">© 2023 ConnectEd</p>
+        </div>
+      </footer>
+
+
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const elements = Array.from(document.querySelectorAll("h2[data-count]"));
+            const observer = new IntersectionObserver(
+                function (entries) {
+                    entries.forEach((entry) => {
+                        if (entry.intersectionRatio >= 0.5) {
+                            const index = elements.indexOf(entry.target);
+                            const delay = index * 250;
+                            setTimeout(() => startCounter(entry.target), delay);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                },
+                {
+                    threshold: 0.5
+                }
+            );
+            elements.forEach((element) => observer.observe(element));
+        
+            function startCounter(element) {
+                const target = parseInt(element.getAttribute("data-count"));
+                const additionalData = element.getAttribute("additional-data") || "";
+                const totalFrames = 480;
+                let frame = 0;
+        
+                function easeOut(t, b, c, d) {
+                    return c * ((t = t / d - 1) * t * t + 1) + b;
+                }
+        
+                function counter() {
+                    if (frame >= totalFrames) {
+                        element.textContent = target + additionalData;
+                        return;
+                    }
+                    frame++;
+                    const easedValue = easeOut(frame, 0, target, totalFrames);
+                    element.textContent = Math.floor(easedValue) + additionalData;
+                    requestAnimationFrame(counter);
+                }
+                counter();
+            }
+        });
+        
+      </script>
+</body>
+</html>
