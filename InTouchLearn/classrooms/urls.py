@@ -14,6 +14,10 @@ urlpatterns = [
     path('unenroll_class/<int:classroom_id>',views.unenroll_class,name='unenroll_class'),
     path('delete_class/<int:classroom_id>',views.delete_class,name='delete_class'),
     path('submit_assignment_request/<int:assignment_id>',views.submit_assignment_request,name='submit_assignment_request'),
-    path('mark_submission_request/<int:submission_id>/<int:teacher_id>',views.mark_submission_request,name='mark_submission_request')
+    path('mark_submission_request/<int:submission_id>/<int:teacher_id>',views.mark_submission_request,name='mark_submission_request'),
+    path('add_course/<int:classroom_id>',views.add_course,name='add_course'),
+    path('dashboard/',views.dashboard, name='dashboard'),
+    path('meeting/',views.videocall, name='meeting'),
+    path('join/', views.join_room, name='join_room'),
 
 ]

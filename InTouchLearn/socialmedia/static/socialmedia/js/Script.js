@@ -111,10 +111,12 @@ ProfileUploader.addEventListener('change', () => {
 
 
 //.................Start Add post Popup................
-let createButtonLg = document.querySelector('#crate-lg');
+let createButtonLg = document.querySelectorAll('.creatPostPop');
 
-createButtonLg.addEventListener('click',()=>{
-    addPostPopup.style.display='flex'
+createButtonLg.forEach(createButton=>{
+    createButton.addEventListener('click',()=>{
+        addPostPopup.style.display='flex'
+    })
 });
 
 document.querySelector('#feed-pic-upload').addEventListener('change',()=>{
@@ -283,6 +285,4 @@ const bgicon = ()=>{
 document.addEventListener('DOMContentLoaded',()=>{
     console.log('loaded')
 })
-
-
 

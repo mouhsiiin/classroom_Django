@@ -8,6 +8,7 @@ import json
 
 @login_required
 def chat(request):
+    curr_user = request.user
     conversations = conversation.objects.filter(user1=request.user) | conversation.objects.filter(user2=request.user)
 
     conversations_list = []
@@ -19,7 +20,7 @@ def chat(request):
             other_user = conversation_obj.user1
         last_message = conversation_obj.messages.last()
         if last_message:
-            last_message_text = last_message.text
+            last_message_text = last_message.message
             last_message_time = last_message.created_on
         else:
             last_message_text = ''
@@ -31,7 +32,8 @@ def chat(request):
             'last_message_time': last_message_time
         })
     context = {
-        'conversations': conversations_list
+        'conversations': conversations_list,
+        'curr_user': curr_user,
     }
     return render(request, 'socialmedia/chat.html', context)
 
@@ -63,27 +65,28 @@ def send_message(request):
         data = json.loads(request.body)
         conversation_id = data.get('conversation_id')
         text = data.get('message')
+        image = data.get('image')
         if conversation_id and text:
             try:
                 conversation_obj = conversation.objects.get(id=conversation_id)
             except conversation.DoesNotExist:
                 return JsonResponse({'error': 'Conversation not found'}, status=404)
-            
-            new_message = message(conversation=conversation_obj, sender=request.user, text=text)
+            if image:
+                new_message = message(conversation=conversation_obj, author=request.user, message=text, image=image)
+            new_message = message(conversation=conversation_obj, author=request.user, message=text)
             new_message.save()
             return JsonResponse({'success': 'Message sent successfully'})
         else:
-            return JsonResponse({'error': 'Conversation ID or text not provided'}, status=400)
+            return JsonResponse({'error': 'Conversation ID and text not provided'}, status=400)
     else:
         return redirect('socialmedia:chat')
     
 
 @login_required
 def get_messages(request):
+    print(request.GET)
     if request.method == 'GET':
-
-        conversation_id = request.headers.get('conversation_id')
-        print(request.headers)
+        conversation_id = request.GET.get('conversation_id')
         print(conversation_id)
         if conversation_id:
             try:
@@ -96,12 +99,14 @@ def get_messages(request):
             for message in messages:
                 messages_data.append({
                     'id': message.id,
-                    'text': message.text,
-                    'sender': message.sender.username,
+                    'message': message.message,
+                    'sender': message.author.username,
+                    'sender_img': message.author.profile_picture.url,
+                    'image': message.image.url if message.image else '',
                     'created_on': message.created_on
                 })
             return JsonResponse({'messages': messages_data}, status=200)
         else:
             return JsonResponse({'error': 'Conversation ID not provided'}, status=400)
     else:
-        return redirect('socialmedia:chat')
+        return JsonResponse({'error': 'Method not allowed'}, status=405)

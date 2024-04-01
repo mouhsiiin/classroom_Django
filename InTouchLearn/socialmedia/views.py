@@ -77,13 +77,21 @@ def post_list_view(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    form = PostForm()
 
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_post = form.save(commit=False)
-            new_post.author = request.user
+        text = request.POST.get('body')
+        
+        print("===>>", text)
+        if text:
+            new_post = Post(body=text, author=request.user)
+            if request.FILES:
+                file = request.FILES.get('file')
+                #check if the file is an image
+                if file.content_type.startswith('image'):
+                    new_post.image = file
+                #check if the file is a video
+                elif file.content_type.startswith('video'):
+                    new_post.video = file
         try:
             new_post.save()
             print("===>>", "Post Saved")
@@ -91,8 +99,10 @@ def post_list_view(request):
         except Exception as e:
             print(e)
             print("===>>", "Post Not Saved")
-
-    user = User.objects.get(id=request.session["user_id"])
+    try:
+        user = User.objects.get(id=request.session["user_id"])
+    except:
+        return redirect('logout')
     userInformation = {
         "username": user.username,
         "email": user.email,
@@ -103,7 +113,6 @@ def post_list_view(request):
     }
     context = {
         'post_list': page_obj,
-        'form': form,
         'user': userInformation,
         'page_obj': page_obj
     }
@@ -143,7 +152,7 @@ def post_edit_view(request, pk):
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('post-detail', pk=pk)
+            return redirect('socialmedia:post-detail', pk=pk)
     else:
         form = PostForm(instance=post)
 
@@ -316,21 +325,37 @@ def picture_upload(request):
 #view for getting comments as json
 @login_required
 def get_comments(request, post_pk):
-    post = get_object_or_404(Post, pk=post_pk)
-    comments = Comment.objects.filter(post=post).order_by('-created_on')
-    comments_list = []
-    for comment in comments:
-        comments_list.append({
-            'id': comment.id,
-            'author': comment.author.username,
-            'content': comment.content,
-            'created_on': comment.created_on.strftime('%Y-%m-%d %H:%M:%S'),
-            'likes': comment.likes.all().count(),
-            'dislikes': comment.dislikes.all().count(),
-            'replies': [{'author': reply.author.username, 'content': reply.content} for reply in comment.replies.all()]
-        })
+    if request.method == 'GET':
+        post = get_object_or_404(Post, pk=post_pk)
+        comments = Comment.objects.filter(post=post).order_by('-created_on')
+        comments_list = list()
+        for comment in comments:
+            replies = []
+            for comet in comments:
+                if comet.parent == comment:
+                    replies.append({
+                        'id': comet.id,
+                        'author': comet.author.username,
+                        'content': comet.comment,
+                        'created_on': comet.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+                        'likes': comet.likes.all().count(),
+                        'dislikes': comet.dislikes.all().count(),
+                        'replies': []
+                    })
+                comments_list.append({
+                    'id': comment.id,
+                    'author': comment.author.username,
+                    'content': comment.comment,
+                    'created_on': comment.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+                    'likes': comment.likes.all().count(),
+                    'dislikes': comment.dislikes.all().count(),
+                    'replies': replies
+                })
 
-    return JsonResponse({'comments': comments_list})
+                return JsonResponse({'comments': comments_list})
+        return JsonResponse({'error' : 'No comments found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
 
 #view for adding comments
 @login_required
@@ -357,3 +382,25 @@ def add_comment(request, post_pk):
             return JsonResponse({'error': 'Invalid request'}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+@login_required
+def search(request):
+    if request.method == 'POST':
+        query = request.POST.get('search')
+        print(query)
+        if query:
+            posts = Post.objects.filter(body__icontains=query)
+            profiles = User.objects.filter(username__icontains=query)
+        else:
+            #getiing the first 10 posts
+            posts = Post.objects.all().order_by('-created_on')[:10]
+            profiles = User.objects.all()[:10]
+        context = {
+            'posts': posts,
+            'profiles': profiles,
+            'query': query,
+        }
+        return render(request, 'socialmedia/search.html', context)
+    else:
+        return redirect('post-list')

@@ -4,61 +4,64 @@
 
 {% block head %}
    <link rel="stylesheet" type="text/css" href="{% static 'classrooms/css/form.css' %}">  
+   <!-- tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 {% endblock %}
 
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-light navbar_custom">
-    <nav role="navigation">
-        <div id="menuToggle">
-          <input type="checkbox" />
-          <span></span>
-          <span></span>
-          <span></span>
-          <ul id="menu">
-            {% if mappings %}
-                {% for mapping in mappings %}
-                    <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}"><li>{{mapping.classroom_id.classroom_name}}</li></a>
-                {% endfor %}
-            {% endif %}
-          </ul>
-        </div>
-      </nav>
-    <a class="navbar-brand" href="#" style="font-size:250% !important; color:#2e45c7 !important; margin-left: 7%; margin-right: 30%"><b>Classroom</b></a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          
-          <li class="nav-item">
-            <a class="nav-link mybtn myinfo" href="{% url 'classrooms:home' %}">Home</a>
-          </li>
 
-          <li class="nav-item active">
-            <a class="nav-link mybtn myinfo" href="{% url 'logout' %}" >Logout<span class="sr-only"></span></a>
-          </li>
-          
-        </ul>
-    </div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-purple-100">
+  <a class="text-2xl font-bold text-purple-700 hover:no-underline" href="{% url 'socialmedia:post-list' %}">
+      <div class="flex">
+          <img src="{% static 'socialmedia/images/logo.svg' %}" alt="logo" class="w-10 h-10"> 
+          <span class="text-2xl font-bold text-purple-700">Classroom</span>
+      </div>
+  </a>
+  <div class="container mx-auto">
+    <div class="text-lg font-semibold"><span>ClassRoom: </span>{{ classroom.classroom_name }}</div>
+
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a href="{% url 'classrooms:render_class' id=classroom.id %}" type="button"  class="m-2 text-lg  nav-link text-purple-700 hover:text-purple-900" >Back to Class</a>
+            </li>
+            
+          </ul>
+      </div>
+  </div>
+
+  <div class="flex items-center">
+      <div class="profile-picture">
+          <img src="{{ user.profile_picture.url }}" alt="Profile Pic" class="w-10 h-10 rounded-full">
+      </div>
+  </div>
 </nav>
+
 {% endblock %}
 
 {% block content_left %}
     <div class="login-page">
-        <img src="{% static 'classrooms/images/boy_and_girl.svg' %}" alt="Boy and Girl" width="400" height="400">
+        <img src="{% static 'classrooms/left.jpg' %}" alt=" Girl" width="400" height="400">
     </div>
 {% endblock %}
 
 {% block content_right %}
-    <div class="login-page">
-        <div class="myform">
-        <form class="login-form" method="POST">
-            {% csrf_token %}
-            {{form|crispy}}
-            <button type='submit' >
-                Create Assignment
-            </button>
-        </form>
-        </div>
-    </div>
+<div class="flex justify-center items-center h-screen bg-gray-100">
+  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+      <form class="login-form" method="POST">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 w-full">
+              Create Assignment
+          </button>
+      </form>
+  </div>
+</div>
+
+
 {% endblock %}
 
 {% block hamburger %}

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,42 +7,74 @@
     <title>Chat</title>
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeO49Z2XlKOYrHtfX7MCBnuHBHK0o8f/0S6wk+nZ7" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'socialmedia/css/chat.css' %}">
-
+    <!-- tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
 
     <div class="big-container">
-        <div class="cnv-container w-100 h-100">
-                <div class="sidebar w-100 h-100">
-                    {% for conversation in conversations %}
-                    <div class="conversation" data-conversationId="{{ conversation.pk }}">
-                        <div class="conversation-avatar">
-                            <img src="{{ conversation.other_user.profile_picture.url }}" alt="profile">
-                        </div>
-                        <span>{{ conversation.other_user.username }}</span>
-                    </div>
-                    {% endfor %}
+        <div class="cnv-container w-full h-full flex flex-col">
+            <div class="sidebar w-full h-full flex flex-col">
+              <div class="sidebar-header flex items-center p-4">
+                <div class="profile flex items-center">
+                  <img src="{{ curr_user.profile_picture.url }}" alt="profile" class="w-8 h-8 rounded-full mr-2">
+                  <span>{{ curr_user.username }}</span>
                 </div>
+              </div>
+              <div class="conversation-list flex-grow overflow-y-auto">
+                {% for conversation in conversations %}
+                <div class="conversation " data-conversation_id="{{ conversation.id }}">
+                  <div class="conversation-avatar w-8 h-8 rounded-full overflow-hidden mr-2">
+                    <img src="{{ conversation.other_user.profile_picture.url }}" alt="profile" class="w-full h-full object-cover">
+                  </div>
+                  <span>{{ conversation.other_user.username }}</span>
+                </div>
+                {% endfor %}
+              </div>
+              <div class="add-cnv p-4">
+                <button data-toggle="modal" data-target="#createConversationModal" class=" font-semibold py-2 px-4 flex items-center justify-center">
+                  <img src="{% static 'socialmedia/images/svg/add_chat.svg' %}" alt="add" class="w-4 h-4 mr-2">
+                  <span>Add Conversation</span>
+                </button>
+              </div>
             </div>
+          </div>
         <div class="msg-container">
-            <div class="chat-header">
-                <h3>Chat</h3>
-                <div>
-                    <button class="btn btn-info" data-toggle="modal" data-target="#createConversationModal"><i class="fas fa-plus">Add a conversation</i></button>
+            <div class="chat-header header-avatar">
+                <div class="other-profile">
+                    <span class="other-name"></span>
                 </div>
+                    <div id="home" class=" font-bold text-xl m-3">
+                        <img src="{% static 'socialmedia/images/logo.svg' %}" alt="academylink" class="w-8 h-8 mr-2 rounded-3xl">
+                        <span>Home</span>
+                    </div>
+                
             </div>
             <div class="chat-body">
-                <h1>
-                    Select a conversation
-                </h1>
-                <div class="msg-input">
-                    <form action="" method="post">
-                        <input type="text" name="message" placeholder="Type a message">
-                        <input type="submit" value="Send" class="btn btn-primary">
-                    </form>
+                <div class="messages">
+                    <div class="select-conversation">
+                        <img width="400" src="{% static 'socialmedia/images/svg/chat-conversation.svg' %}" alt="select conversation">
+                        <h3>Select a conversation to start chatting</h3>
+                    </div>
                 </div>
+                <div class="msg-input flex items-center bg-gray-100 p-2 w-3/4">
+                    <form action="" method="post" class="flex flex-grow">
+                      <div class="input-container flex items-center bg-white rounded-full shadow-sm flex-grow mr-2">
+                        <input type="text" name="message" placeholder="Type a message" class="msg-input-field flex-grow w-50 px-4 py-2 outline-none">
+                        <div class="input-actions flex items-center">
+                          <label for="image" class="image-upload-label cursor-pointer text-gray-500 mr-2">
+                            <img width="25" src="{% static 'socialmedia/images/svg/image-plus.svg' %}" alt="image">
+                          </label>
+                          <input type="file" name="image" id="image" class="image-upload-input hidden" accept="image/*" onchange="previewImage(event)">
+                          <img id="preview-image" class="hidden w-8 h-8 rounded-full object-cover" alt="Preview">
+                        </div>
+                      </div>
+                      <button type="submit" class="send-btn bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full">
+                        <img width="25" src="{% static 'socialmedia/images/svg/send.svg' %}" alt="send">
+                      </button>
+                    </form>
+                  </div>
             </div>
         </div>
     </div>
@@ -90,7 +123,24 @@
             });
         });
 
-    
+        function previewImage(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                const previewImage = document.getElementById('preview-image');
+                previewImage.src = e.target.result;
+                previewImage.classList.remove('hidden');
+              };
+              reader.readAsDataURL(input.files[0]);
+            }
+          }
+
+        $(document).ready(function() {
+            $('#home').click(function() {
+                location.href = "{% url 'socialmedia:post-list' %}";
+            });
+        });
 
         //creating a conversation / thread
         $(document).ready(function() {
@@ -126,36 +176,94 @@
                         c.classList.remove('active');
                     }
                 });
+                console.log(conversation.dataset.conversation_id);
+                //adding the other user's profile picture to the chat header
+                const chatHeader = document.querySelector('.chat-header');
+                other_picture = conversation.querySelector('img').src;
+                other_user = conversation.querySelector('span').innerText;
+                console.log(other_user)
+                try {
+                    chatHeader.querySelector('.other-profile').innerHTML = `
+                        <img src="${other_picture}" alt="profile" class="w-8 h-8 rounded-full mr-2">
+                        <span>${other_user}</span>
+                    `;
+                } catch (error) {
+                    console.log(error);
+                }
+                document.querySelector('.messages').innerHTML = ``;
+                
 
                 //fetch messages
              
-                fetch('/social/get_messages/', {
+                fetch('/social/get_messages/?conversation_id=' + conversation.dataset.conversation_id, {
                     method: 'GET',
                     headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'conversation_id': conversation.dataset.conversationid
-
-                }})
+                        'X-CSRFToken': '{{ csrf_token }}'}
+                })
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    if (data.success) {
-                        const chatBody = document.querySelector('.chat-body');
+                    if (data.messages) {
+                        console.log('success');
+                        const chatBody = document.querySelector('.messages');
                         chatBody.innerHTML = '';
                         data.messages.forEach(message => {
                             const div = document.createElement('div');
                             div.classList.add('message');
-                            div.classList.add(message.sender === 'user' ? 'sent' : 'received');
+                            div.classList.add(message.sender === '{{ curr_user.username }}' ? 'sent' : 'received');
                             div.innerHTML = `
-                                <div class="message-avatar">${message.sender[0]}</div>
-                                <div class="message-body">${message.body}</div>
+                                <div class="message-avatar">
+                                    <img src="${message.sender === '{{ curr_user.username }}' ? '{{ curr_user.profile_picture.url }}' : message.sender_img}" alt="profile">
+                                </div>
+                                <div class="message-body">
+                                    <span>${message.message}</span>
+                                    ${message.image ? `<img src="${message.image}" alt="image">` : ''}
+                                </div>
                             `;
                             chatBody.appendChild(div);
                         });
                     }
                 });
-            });
-        });
+            })});
+
+        //live chat
+        setInterval(() => {
+            const activeConversation = document.querySelector('.conversation.active');
+            if (activeConversation) {
+                fetch('/social/get_messages/?conversation_id=' + activeConversation.dataset.conversation_id, {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.messages) {
+                        const chatBody = document.querySelector('.messages');
+                        const existingMessages = chatBody.querySelectorAll('.message');
+                        const existingMessagesCount = existingMessages.length;
+        
+                        data.messages.forEach((message, index) => {
+                            if (index >= existingMessagesCount) {
+                                const div = document.createElement('div');
+                                div.classList.add('message');
+                                div.classList.add(message.sender === '{{ curr_user.username }}' ? 'sent' : 'received');
+                                div.innerHTML = `
+                                <div class="message-avatar">
+                                    <img src="${message.sender === '{{ curr_user.username }}' ? '{{ curr_user.profile_picture.url }}' : message.sender_img}" alt="profile">
+                                </div>
+                                <div class="message-body">
+                                    <span>${message.message}</span>
+                                    ${message.image ? `<img src="${message.image}" alt="image">` : ''}
+                                </div>
+                            `;
+                                chatBody.appendChild(div);
+                            }
+                        });
+                    }
+                });
+            }
+        }, 1000);
 
         //sending a message
         const msgInput = document.querySelector('.msg-input');
@@ -168,23 +276,14 @@
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
                 body: JSON.stringify({
-                    conversation_id: document.querySelector('.conversation.active').dataset.conversationId,
+                    conversation_id: document.querySelector('.conversation.active').dataset.conversation_id,
                     message: message
                 })
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.success) {
                     msgInput.querySelector('input[name="message"]').value = '';
-                    const div = document.createElement('div');
-                    div.classList.add('message');
-                    div.classList.add('sent');
-                    div.innerHTML = `
-                        <div class="message-avatar">{{ conversation.user2.profile_picture.url }}</div>
-                        <div class="message-body">${message}</div>
-                    `;
-                    document.querySelector('.chat-body').appendChild(div);
                 }
             });
         });
@@ -192,3 +291,5 @@
     </script>
 </body>
 </html>
+
+

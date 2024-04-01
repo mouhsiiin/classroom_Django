@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     post_list_view, post_detail_view, post_edit_view, post_delete_view,
     add_like, add_dislike, add_comment_like, add_comment_dislike,
-    comment_reply_view, editprofile, profile, picture_upload, add_comment, get_comments
+    comment_reply_view, editprofile, profile, picture_upload, add_comment, get_comments, search
 )
 from .chat import chat, create_conversation, send_message, get_messages
 
@@ -25,6 +25,7 @@ urlpatterns = [
     path('create_conversation/', create_conversation, name='create_conversation'),
     path('send_message/', send_message, name='send_message'),
     path('get_messages/', get_messages, name='get_messages'),
+    path('search/', search, name='search'),
 
 
 ]

@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{% static 'socialmedia/images/logo.svg' %}">
-    <link rel="stylesheet" href="https://cdnjs.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
     <title>(FST Career) Website</title>
-
-    
-
-
     <!-- .................CUSTOM CSS LINK................. -->
     <link rel="stylesheet" href="{% static 'socialmedia/css/Style.css' %}">
 
@@ -21,12 +14,9 @@
     <link rel="stylesheet" href="{% static 'socialmedia/css/fontawesome-free-6.3.0-web/css/all.css' %}">
 
     <!-- ...............Swiper Slider Link.................. -->
-
     {% block extra_css %}
-
     {% endblock %}
 </head>
-
 <body>
     <!-- ...................Start Navbar................... -->
     <nav>
@@ -36,11 +26,16 @@
                 <span>Acadimy</span>
             </div>
             <div class="serch-bar">
-                <i class="fa fa-search"></i>
-                <input type="search" placeholder="Serch For Creators">
+                <form action="{% url 'socialmedia:search' %}" method="POST">
+                    {% csrf_token %}
+                    <input name="search" type="search" placeholder="Search" id="search-input">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
             </div>
             <div class="add-post">
-                <label for="add-post" class="btn btn-primary mini-button">Add Post</label>
+                <div class="creatPostPop">
+                    <label for="add-post" class="btn btn-primary mini-button ">Add Post</label>
+                </div>
                 <div class="profile-picture" id="my-profile-picture">
                     <img src="{{ user.profile_picture.url }}" alt="">
                 </div>
@@ -49,17 +44,11 @@
     </nav>
     <!-- ...................Start Navbar................... -->
 
-
-
     <!-- ...................Start Main Section................... -->
     <main>
         <div class="container main-container">
-
-
-            <!--================== Main Left Start ==================  -->
+            <!--================== Main Left Start ================== -->
             <div class="main-left">
-
-
                 <!-- .......Profile.Start........ -->
                 <a class="profile">
                     <div class="profile-picture" id="my-profile-picture">
@@ -67,7 +56,6 @@
                     </div>
                     <div class="profile-handle">
                         <h4>{{ user.username}}</h4>
-
                         <p class="text-gry">
                             {{ user.email }}
                         </p>
@@ -75,76 +63,57 @@
                 </a>
                 <!-- .......Profile.End........ -->
 
-
-
                 <!-- .........Start Aside Bar.......... -->
                 <aside>
-
                     <a class="menu-item active">
                         <span><img src="{% static 'socialmedia/images/svg/house-door.svg'%}" alt=""></span>
                         <h3>Home</h3>
                     </a>
-
-
-                    <a class="menu-item" href="{% url 'socialmedia:chat' %}" >
+                    <a class="menu-item" href="{% url 'socialmedia:chat' %}">
                         <span><img src="{% static 'socialmedia/images/svg/chat-left-dots.svg'%}" alt=""></span>
                         <small class="notfy-counter" id="notfyCoutner2">3</small>
                         <h3>Message</h3>
                     </a>
-
                     <a class="menu-item" href="/classrooms">
                         <span><img src="{% static 'socialmedia/images/svg/bookmarks.svg'%}" alt=""></span>
                         <h3>Classroom</h3>
                     </a>
-
                     <a class="menu-item" id="theme">
                         <span><img src="{% static 'socialmedia/images/svg/palette.svg'%}" alt=""></span>
                         <h3>Theme</h3>
                     </a>
-
                     <a class="menu-item">
                         <span><img src="{% static 'socialmedia/images/svg/gear.svg'%}" alt=""></span>
                         <h3>Settings</h3>
                     </a>
 
-
                     <!-- ...........Add Post Btn......... -->
-                    <label for="add-post" class="btn btn-primary btn-lg" id="crate-lg">Create A Post</label>
-
-
+                    <div class="creatPostPop">
+                        <label for="add-post" class="btn btn-primary btn-lg creatPostPop" >Create A Post</label>
+                    </div>
                 </aside>
                 <!-- ..........End Aside Bar........... -->
-
-
-
             </div>
             <!--==================  Main Left End =================== -->
-
 
             <!--================== Main Middle Start================== -->
             <div class="main-middle">
                 <div class="middle-container">
-
                     <!--.............. Feed Aria Start............... -->
                     <div class="feeds">
                         {% block feeds %}
-
                         {% endblock %}
                     </div>
                     <!--.............. Feed Aria End............... -->
                 </div>
             </div>
             <!--================== Main Middle End==================  -->
-
-
         </div>
     </main>
     <!-- ...................Start Main Section................... -->
 
-
-
-
     <!-- ...................Start PopUps Aria................... -->
+
     <!-- ................Start Profile-Popup............ -->
     <div class="popup profile-popup">
         <div>
@@ -156,8 +125,7 @@
                 </div>
                 <label for="profile-upload" class="btn btn-primary btn-lg">Update Profile Picture</label>
                 <input type="file" accept="image/jpg, image/png, image/jpeg" id="profile-upload" data-csrf="{{csrf_token}}">
-                <a href="{% url 'socialmedia:profile' user.username %}" class="btn btn-primary btn-lg"
-                    id="editProfile">Profile</a>
+                <a href="{% url 'socialmedia:profile' user.username %}" class="btn btn-primary btn-lg" id="editProfile">Profile</a>
                 <a href="{% url 'logout' %}" class="btn btn-primary btn-lg" id="logoutbtn">Log Out</a>
             </div>
             <span class="close"><i class="fa fa-close"></i></span>
@@ -165,23 +133,22 @@
     </div>
     <!-- ................End Profile-Popup............ -->
 
-
     <!-- ................Start Add Post Popup............ -->
     <div class="popup add-post-popup">
         <div>
-            <form class="popup-box add-post-pop">
+            <form class="popup-box add-post-pop" action="{% url 'socialmedia:post-list' %}" method="post">
+                {% csrf_token %}
                 <h1>Add New Post</h1>
                 <div class="row post-title">
-                    <label>Title</label>
-                    <input type="text" placeholder="What's on your mind ?" id="title-input">
+                    <input name="body" type="text" placeholder="What's on your mind ?" id="title-input">
                 </div>
                 <div class="row post-img">
                     <img src="" id="postIMg">
                     <label for="feed-pic-upload" class="feed-upload-button">
                         <span><i class="fa fa-add"></i></span>
-                        Upload A Picture
+                        Upload A Picture Or Video
                     </label>
-                    <input type="file" accept="image/jpg, image/png, image/jpeg" id="feed-pic-upload">
+                    <input name="file" type="file" accept="image/jpg, image/png, image/jpeg" id="feed-pic-upload">
                     <input type="submit" class="btn btn-primary btn-lg bbb" value="Add Post">
                 </div>
             </form>
@@ -189,7 +156,6 @@
         </div>
     </div>
     <!-- ................End  Add Post Popup............ -->
-
 
     <!-- ................Start Theme Customize Popup............ -->
     <div class="popup theme-customize">
@@ -217,6 +183,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- ..........Primary Colors........ -->
                 <div class="colors">
                     <h4>Color</h4>
@@ -228,6 +195,7 @@
                         <span class="color-5 "></span>
                     </div>
                 </div>
+
                 <!-- ...........Background Colors.......... -->
                 <div class="background">
                     <h4>Background</h4>
@@ -246,11 +214,9 @@
             <span class="close"><i class="fa fa-close"></i></span>
         </div>
     </div>
-    <!-- ................End   Theme Customize Popup............ -->
-
+    <!-- ................End  Theme Customize Popup............ -->
 
     <!-- ...................End PopUps Aria................... -->
-
 
     <!-- ...................Swiper JS Link.................. -->
     <script src="{% static 'socialmedia/css/Swiper/swiper-bundle.min.js' %}"></script>
@@ -260,12 +226,9 @@
         document.querySelector('.logo').addEventListener('click', () => {
             window.location.href = '/';
         });
-        
-        
-     
-        </script>
-        <script src="{% static 'socialmedia/js/Script.js' %}"></script>
-        
-    </body>
+
     
-    </html>
+    </script>
+    <script src="{% static 'socialmedia/js/Script.js' %}"></script>
+</body>
+</html>

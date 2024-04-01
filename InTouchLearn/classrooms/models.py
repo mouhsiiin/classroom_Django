@@ -43,9 +43,9 @@ class Submissions(models.Model):
 
 class CourseContent(models.Model):
     classroom_id=models.ForeignKey(Classrooms,on_delete=models.CASCADE)
-    content_title=models.CharField(max_length=50)
+    content_title=models.CharField(max_length=50 , default='Title')
     content_description=models.TextField()
     content_file=models.FileField(upload_to='documents')
-
+    
     def __str__(self):
         return self.content_title

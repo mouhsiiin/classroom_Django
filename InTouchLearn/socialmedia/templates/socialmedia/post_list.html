@@ -4,41 +4,6 @@
 
 {% block feeds %}
 
-    <div class="row justify-content-center mt-3 mb-5">
-        <div class="col-md-5 col-sm-12 border-bottom">
-            <form method="post" enctype="multipart/form-data" class="post-input">
-
-                {% csrf_token %}
-                {% for field in form %}
-                <div class="mb-3 add-post ">
-                    {{ field.label_tag }}
-                    {% if field.widget.is_hidden %}
-                        {{ field }}
-                    {% elif field.widget.input_type == 'textarea' %}
-                        <textarea class="form-control" style="width: 100%;" name="{{ field.name }}" id="{{ field.id_for_label }}">{{ field.value|default:'' }}</textarea>
-                    {% elif field.widget.input_type == 'file' %}
-                    <input type="file" class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}">
-                    <span class="input-group-text">
-                        {% if field.name == 'image' %}
-                            <i class="fa fa-image"></i>
-                        {% elif field.name == 'video' %}
-                            <i class="bi bi-play-btn"></i>
-                        {% else %}
-                            {% endif %}
-                    </span>
-                    {% else %}
-                        {{ field }}
-                    {% endif %}
-                    {% if field.help_text %}
-                        <small class="text-muted">{{ field.help_text }}</small>
-                    {% endif %}
-                </div>
-                {% endfor %}
-                <button class="btn btn-primary" >Post</button>
-            </form>
-        </div>
-    </div>
-
     {% for post in post_list %}
     <div class="feed" id="{{post.pk}}">
         <div class="feed-top">
@@ -53,9 +18,12 @@
                     </div>
                 </div>
             </div>
-            <span class="edit">
-                <img src="{% static 'socialmedia/images/svg/three-dots.svg' %}">
-            </span>
+            
+            <a href="{% url 'socialmedia:post-detail' post.pk %}" class="pointer">
+                <span class="edit">
+                    <img src="{% static 'socialmedia/images/svg/three-dots.svg' %}">
+                </span>
+            </a>
         </div>
         <div class="caption">
             <div class="title">{{ post.body }}</div>
@@ -95,7 +63,7 @@
                     </button>
                 </div>
                 <div class="comments">
-                    <button class="btn btn-primary com-btn">
+                    <button data-post-id="{{post.pk}}" class="btn btn-primary com-btn">
                         <i class="far fa-comment-alt"></i>
                         <span>Comment</span>
                     </button>
@@ -104,7 +72,7 @@
         <div class="bookmark">
             <i class="fa fa-bookmark"></i>
         </div>
-        <div class="comments-container">
+        <div id="{{ post.pk }}" class="comments-container comments-popup">
 
         </div>
     </div>
@@ -201,6 +169,7 @@
 
         commentBtn.forEach(btn => {
             btn.addEventListener('click', function(){
+                console.log(btn)
                 const postId = btn.getAttribute('data-post-id');
                 console.log(postId);
     
@@ -209,13 +178,36 @@
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}',
                         'Content-Type': 'application/json'}})
-                .then(response => {
-                    if (response.ok){
-                        document.querySelector('#'+postId+' .comments-container').innerHTML = response.text();
-                    }
-                })
-                .then(data => {
+                .then(data =>{
                     console.log(data);
+                    for (let i = 0; i < data.length; i++){
+                        console.log(data[i].body);
+                    }
+
+                    const commentsContainer = document.querySelector(`.comments-container`);
+                    commentsContainer.innerHTML = '';
+                    data.forEach(comment => {
+                        const commentDiv = document.createElement('div');
+                        commentDiv.innerHTML = `
+                        <div class="comment">
+                            <div class="user">
+                                <div class="profile-picture">
+                                    <img src="${comment.author.profile_picture}" alt="">
+                                </div>
+                                <div class="info">
+                                    <h3>${comment.author.username}</h3>
+                                    <div class="time text-gry">
+                                        <small><span>${comment.created_on}</span></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="caption">
+                                <div class="title">${comment.body}</div>
+                            </div>
+                        </div>
+                        `;
+                        commentsContainer.appendChild(commentDiv);
+                    });
                 });
                 
             });
