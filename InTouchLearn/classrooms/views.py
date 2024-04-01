@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import math, random 
-from .models import Classrooms, Teachers, Students, Assignments, Submissions
+from .models import Classrooms, Teachers, Students, Assignments, Submissions, CourseContent
 from itertools import chain
 from .forms import CreateAssignmentForm
 from . import email
@@ -87,12 +87,18 @@ def render_class(request,id):
         students = Students.objects.filter(classroom_id = id)
     except Exception as e:
         students = None
+
+    try:
+        content = CourseContent.objects.filter(classroom_id = id)
+    except Exception as e:
+        content = None
     
     teachers = Teachers.objects.filter(classroom_id = id)
     teacher_mapping = Teachers.objects.filter(teacher_id=request.user).select_related('classroom_id')
     student_mapping = Students.objects.filter(student_id=request.user).select_related('classroom_id')
-    mappings = chain(teacher_mapping,student_mapping) 
-    return render(request,'classrooms/class_page.html',{'classroom':classroom,'assignments':assignments,'students':students,'teachers':teachers,"mappings":mappings})
+    mappings = chain(teacher_mapping,student_mapping)
+
+    return render(request,'classrooms/class_page.html',{'classroom':classroom,'assignments':assignments,'students':students,'teachers':teachers,"mappings":mappings , 'content':content})
 
 @teacher_required
 @login_required
@@ -117,7 +123,7 @@ def create_assignment(request,classroom_id):
         else:
             return render(request,'classrooms/create_assignment.html',{'form':form,'mappings':mappings})
     form = CreateAssignmentForm()
-    return render(request,'classrooms/create_assignment.html',{'form':form,'mappings':mappings})
+    return render(request,'classrooms/create_assignment.html',{'form':form,'mappings':mappings, 'classroom':Classrooms.objects.get(pk=classroom_id)})
 
 
 @teacher_required
@@ -210,3 +216,34 @@ def generate_class_code(total_digits,existing_codes) :
             print('Code not in existing codes')
             break
     return code 
+
+
+@login_required
+def add_course(request,classroom_id):
+    if request.method == 'POST':
+        content_title = request.POST.get('content_title')
+        content_description = request.POST.get('content_description')
+        content_file = request.FILES.get('content_file')
+        if content_file:
+            course_content = CourseContent(classroom_id = Classrooms.objects.get(pk=classroom_id),content_title=content_title,content_description=content_description,content_file=content_file)
+        else:
+            course_content = CourseContent(classroom_id = Classrooms.objects.get(pk=classroom_id),content_title=content_title,content_description=content_description)
+        course_content.save()            
+    return redirect('classrooms:render_class',id=classroom_id)
+
+
+
+@login_required
+def dashboard(request):
+    return render(request, 'classrooms/meeting.html', {'name': request.user. username})
+
+@login_required
+def videocall(request):
+    return render(request, 'classrooms/videocall.html', {'name': request.user.first_name + " " + request.user.last_name})
+
+@login_required
+def join_room(request):
+    if request.method == 'POST':
+        roomID = request.POST['roomID']
+        return redirect("/classrooms/meeting?roomID=" + roomID)
+    return render(request, 'classrooms/joinmeet.html')

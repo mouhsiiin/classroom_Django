@@ -9,84 +9,73 @@
     <link rel="stylesheet" type="text/css" href="{% static 'classrooms/css/base_class.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'classrooms/css/assignment_summary.css' %}">
     {% block head %}{% endblock %}
+    <!-- tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 </head>
-<body class="container-fluid">
-    <div>
-    <nav class="navbar navbar-expand-lg navbar-light navbar_custom">
-        <nav role="navigation">
-          <div id="menuToggle" style="z-index: 6;" >
-            <input type="checkbox" />
-            <span></span>
-            <span></span>
-            <span></span>
-            <ul id="menu" style="padding-top: 40px; padding-right: 3px; padding-left: 30px; box-shadow: 1px 1px 2px 1px #888888;">
-              
-              <div style="height: 100vh !important; overflow-y: auto; padding: none !important; margin:0% !important" >
-              {% if mappings %}
-                <h4 class="hamburger_heading"><b>All Classes</b></h4>
-                <div class="Overlapped_white"></div>
-                <br><br><br>
-                  {% for mapping in mappings %}
-                      {% if assignment.classroom_id == mapping.classroom_id %}
-                        <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}"><li class="hamburger_current_class">{{mapping.classroom_id.classroom_name|truncatechars:30 }}</li></a>
-                      {% else %}
-                      <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}"><li class="highlights">{{mapping.classroom_id.classroom_name|truncatechars:30 }}</li></a>
-                      {% endif %}
-                  {% endfor %}                    
-              {% endif %}
-            </div>
-            </ul>
-          </div>
-          </nav>
-          <div class="navbar-brand" href="#" style="font-size:250% !important; color:#2e45c7 !important; margin-left: 7%; margin-right: 20%"><b>{{assignment.assignment_name}}</b></div>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link mybtn myinfo" href="{% url 'classrooms:home' %}">Home</a>
-                  </li>
-                  <li class="nav-item active">
-                    <a class="nav-link mybtn myinfo" href="{% url 'logout' %}">Logout<span class="sr-only"></span></a>
-                  <li class="nav-item">
-                    <a class="nav-link mybtn myinfo" href="{% url 'classrooms:render_class' id=assignment.classroom_id.id %}">Back to Class</a>
-                  </li>
-                  <li class="nav-item active">
-                    <div class="image_cropper">
-                      <img src="{{ user.profile_picture.url }}" alt="Profile Pic" class="profile_pic_style">
-                    </div>
-                  </li>
-            </ul>
-        </div>
-        </nav>    
-        </div>
-    
-    <input type="hidden" id="submission_id" name="submission_id">
-    <input type="hidden" id="assignment_id" name="assignment_id">
-    <input type="hidden" id="user_id" name="user_id" >
-    <br>
-    <h4>&emsp;&emsp;&emsp;&emsp;&emsp; Total students: {{ no_of_students.count }} &emsp;&emsp;&emsp;&emsp;&emsp; No. of Submissions: {{ submissions.count }} &emsp;&emsp;&emsp;&emsp;&emsp; <a href="{% url 'classrooms:delete_assignment' assignment_id=assignment.id %}">Delete Assignment</a></h4> 
-    {% for submission in submissions %} 
-    <div class="container_of_submissions">
-      <br>   
-        <div class="card-body submission-card">
-            <h5 class="card-title">{{ submission.student_id.student_id.username }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Submitted at {{ submission.submitted_time }} on {{ submission.submitted_date }}</h6>
-            <h6 class="card-subtitle mb-2 text-muted">{{ submission.marks_alloted }} / {{ submission.assignment_id.total_marks }}</h6>
-            <h6 class="card-subtitle mb-2 text-muted">Due date and time : {{ submission.assignment_id.due_time }} on {{ submission.assignment_id.due_date }}</h6>
-            {% if submission.submitted_on_time %}
-            <h6 class="card-subtitle mb-2 text-muted">Submitted on time</h6>
-            {% else %}
-            <h6 class="card-subtitle mb-2 text-muted" style="color: crimson !important;">Oops! Submitted late</h6>
-            {% endif %}
-            <a  href="{{ submission.submission_file }}" download> Download submitted file </a>
-            <br>
-            <a href="#mark_assignment" data-submission_value="{{ submission.id }}" data-assignment_value="{{ submission.assignment_id.id }}" data-user_id="{{ user.id }}">Mark Submission</a>
-        </div>
-      
-    </div>
 
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-purple-100">
+      <a class="text-2xl font-bold text-purple-700 hover:no-underline" href="{% url 'classrooms:dashboard' %}">
+          <div class="flex">
+              <img src="{% static 'socialmedia/images/logo.svg' %}" alt="logo" class="w-10 h-10"> 
+              <span class="text-2xl font-bold text-purple-700">Classroom</span>
+          </div>
+      </a>
+      <div class="container mx-auto">
+        <div class="text-lg font-semibold"><span>Assignment: </span>{{ assignment.assignment_name }}</div>
+
+  
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                  <a href="{% url 'classrooms:render_class' id=assignment.classroom_id.id %}" type="button"  class="m-2 text-lg  nav-link text-purple-700 hover:text-purple-900" >Back to Class</a>
+                </li>
+                
+              </ul>
+          </div>
+      </div>
+  
+      <div class="flex items-center">
+          <div class="profile-picture">
+              <img src="{{ user.profile_picture.url }}" alt="Profile Pic" class="w-10 h-10 rounded-full">
+          </div>
+      </div>
+  </nav>
+      
+<div class="container">
+
+  <input type="hidden" id="submission_id" name="submission_id">
+  <input type="hidden" id="assignment_id" name="assignment_id">
+  <input type="hidden" id="user_id" name="user_id">
+  <br>
+  <h4 class="text-lg font-semibold">
+    <span class="mr-4">Total students: {{ no_of_students.count }}</span>
+      <span class="mr-4">No. of Submissions: {{ submissions.count }}</span>
+      <a href="{% url 'classrooms:delete_assignment' assignment_id=assignment.id %}" class="text-red-500 hover:text-red-700">Delete Assignment</a>
+    </h4>
+    
+    {% for submission in submissions %}
+<div class="container_of_submissions mt-8">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h5 class="text-2xl font-semibold mb-2">student: {{ submission.student_id.student_id.first_name }} {{submission.student_id.student_id.last_name}}</h5>
+        <p class="text-gray-600 text-sm mb-2">Submitted at {{ submission.submitted_time }} on {{ submission.submitted_date }}</p>
+        <p class="text-gray-600 text-sm mb-2">{{ submission.marks_alloted }} / {{ submission.assignment_id.total_marks }}</p>
+        <p class="text-gray-600 text-sm mb-2">Due date and time: {{ submission.assignment_id.due_time }} on {{ submission.assignment_id.due_date }}</p>
+        {% if submission.submitted_on_time %}
+        <p class="text-gray-600 text-sm mb-2">Submitted on time</p>
+        {% else %}
+        <p class="text-red-500 text-sm mb-2">Oops! Submitted late</p>
+        {% endif %}
+        <a href="{{ submission.submission_file.url }}" download class="text-blue-500 hover:text-blue-700 block mb-4">View submitted file</a>
+        <a href="#mark_assignment" data-submission_value="{{ submission.id }}" data-assignment_value="{{ submission.assignment_id.id }}" data-user_id="{{ user.id }}" class="text-blue-500 hover:text-blue-700">Mark Submission</a>
+    </div>
+</div>
+{% endfor %}
+
+    
     <div class="modal" tabindex="-1" id="mark_assignment">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -96,22 +85,24 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-           <div class="modal-body">
-                <form method="POST" class="cclass_form" id="mark_assignment_form">
-                  {% csrf_token %}
-                  <div class="form-group">
-                    <input type="number" class="form-control" id="submission_marks" placeholder="Submission Marks">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </form> 
-           </div>
+          <div class="modal-body">
+            <form method="POST" class="cclass_form" id="mark_assignment_form">
+              {% csrf_token %}
+              <div class="form-group">
+                <input type="number" class="form-control" id="submission_marks" placeholder="Submission Marks">
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-    {% endfor %}
-</body>
-<script>
-   $('a[href$="#mark_assignment"]').on( "click", function() {
+  </div>
+  </body>
+  
+  
+  <script>
+    $('a[href$="#mark_assignment"]').on( "click", function() {
         $('#mark_assignment').modal('show');
         var assignment_id = $(this).data('assignment_value');
         var submission_id = $(this).data('submission_value');

@@ -21,3 +21,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+    def is_teacher(self):
+        return self.role == 'teacher'

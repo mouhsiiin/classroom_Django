@@ -7,62 +7,36 @@
 {% block burger %}
 
 
+<div class="m-20">
 
-{% if mappings %}
-<div class="row">
-    {% for mapping in mappings %}
-    {% if forloop.counter|divisibleby:4 %}
-    <div class="col-md-3">
-        <div class="card custom_card card-margin" style="width: 18rem;">
-            <!-- <div> -->
-            <div class="img-as-background colorme">
-                <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}" style="text-decoration: none;">
-                    <h2 class="class-name-style">{{ mapping.classroom_id.classroom_name|truncatechars:30 }}</h2>
-                </a>
+    {% if mappings %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for mapping in mappings %}
+        <div class=" max-w-sm rounded-3xl overflow-hidden shadow-lg ">
+            <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}" class="hover:no-underline" >    
+                <div class="colorme px-6 py-4">
+                    <div class="text-white font-bold text-xl mb-2 ">{{ mapping.classroom_id.classroom_name|truncatechars:30 }}</div>
+                    <p class="text-base text-white"><i>{{ mapping.classroom_id.section|truncatechars:30 }}</i></p>
+                </div>
+            </a>
+            <div class="px-6 py-4">
                 {% for teacher in teachers_all %}
                 {% if teacher.classroom_id == mapping.classroom_id %}
-                <p class="section-style"><i>{{ teacher.teacher_id|truncatechars:15 }}</i></p>
+                <p class="text-gray-600 italic text-sm">{{ teacher.teacher_id|truncatechars:30 }}</p>
                 {% endif %}
                 {% endfor %}
             </div>
-            <!-- </div> -->
-            <div class="card-body card-text"><i>{{ mapping.classroom_id.section|truncatechars:20 }}</i>
-            </div>
         </div>
+        {% endfor %}
     </div>
-</div>
-{% if not forloop.last %}
-<br>
-<div class="row">
-    {% endif %}
     {% else %}
-    <div class="col-md-3">
-        <div class="card custom_card card-margin" style="width: 18rem;">
-            <!-- <div> -->
-            <div class="img-as-background colorme">
-                <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}" style="text-decoration: none;">
-                    <h2 class="class-name-style">{{ mapping.classroom_id.classroom_name|truncatechars:30 }}</h2>
-                </a>
-                {% for teacher in teachers_all %}
-                {% if teacher.classroom_id == mapping.classroom_id %}
-                <p class="section-style"><i>{{ teacher.teacher_id|truncatechars:30 }}</i></p>
-                {% endif %}
-                {% endfor %}
-            </div>
-            <!-- </div> -->
-
-            <div class="card-body card-text"><i>{{ mapping.classroom_id.section|truncatechars:30 }}</i></div>
-        </div>
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">No classrooms found!</h4>
+        <p>Create a new classroom.</p>
     </div>
     {% endif %}
-    {% endfor %}
+    
 </div>
-{% else %}
-<div class="alert alert-info" role="alert">
-    <h4 class="alert-heading">No classrooms found!</h4>
-    <p>create a new classroom.</p>
-{% endif %}
-
 <script type="text/javascript">
     var colors_1 = ['#92081C', '#050377', '#23542B', '#462247'];   //dark colors
     var colors_2 = ['#FA9696', '#BCC0FF', '#3AFB76', '#964998'];    //light colors

@@ -49,7 +49,6 @@ body{
 
 img{
     display: block;
-    width: 100%;
 }
 
 .profile-picture{
@@ -58,10 +57,17 @@ img{
     border-radius: 50%;
     overflow: hidden;
 }
+.profile-picture img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .profile-picture:hover{
     opacity: 0.75;
 }
-
+.search button {
+    color: white;
+}
 .btn{
     padding: var(--btn-padding);
     display: inline-block;
@@ -330,6 +336,12 @@ aside .menu-item:nth-last-child(2){
     justify-content: space-between;
     align-items: center;   
 }
+.feed-img, .video-post{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 60vh;
+}
 .myfeed .feed-top .edit{
      position: relative;  
 }
@@ -345,6 +357,7 @@ aside .menu-item:nth-last-child(2){
     border-radius: var(--card-border-radius);
     overflow: hidden;
     margin: .8rem 0;
+
 }
 .feed .action-button{
     display: flex;
@@ -617,7 +630,8 @@ aside .menu-item:nth-last-child(2){
     font-size: 1.6rem;
     color: var(--color-gray);
     margin-left: .5rem;  
-    margin-top: -.5rem; 
+    margin-top: -.5rem;
+    cursor: pointer;
 }
 
 /*.............. End Profile popup.............. */
@@ -666,14 +680,41 @@ aside .menu-item:nth-last-child(2){
 
 
 /*.............. video feed.............. */
-.video-post{
+.video-post {
+    max-width: 100%; /* Ensure the video container doesn't exceed its parent's width */
+}
+
+.embed-responsive {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+.embed-responsive::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%; /* 16:9 aspect ratio (h/w * 100) */
+}
+
+.embed-responsive .embed-responsive-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     width: 100%;
     height: 100%;
-    position: relative;
-    border-radius: var(--card-border-radius);
-    overflow: hidden;
-    
+    border: none;
 }
+
+/* Ensure video doesn't stretch beyond its container */
+.video-post video {
+    max-width: 100%;
+    height: auto;
+}
+
 /*.............. End Add post popup.............. */
 
 

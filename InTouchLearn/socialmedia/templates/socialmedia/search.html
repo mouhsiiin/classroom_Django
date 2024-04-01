@@ -1,0 +1,202 @@
+{% extends 'socialmedia/base.html' %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css">
+    <style>
+        
+        #search button:focus {
+            outline: none;
+        }
+        .inactive {
+            color: rgb(41, 41, 41) !important;
+            border: #6b4de6 2px solid !important; ;
+        }
+        .profile {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            border-radius: 30px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .profile:hover {
+            cursor: pointer;
+        }
+        .profile-top {
+            display: flex;
+            align-items: center;
+        }
+        .profile .info {
+            margin-left: 1rem;
+        }
+        
+        
+    </style>
+
+{% endblock %}
+
+{% block feeds %}
+{% load static %}
+
+<div class="max-w-3xl mx-auto mt-8">
+    <div id="search" class="flex">
+        <!-- Tab buttons -->
+        <button id="tab1" class="tab-btn btn btn-primary text-gray-800 py-2 px-4 rounded-tl-lg ">Post Results</button>
+        <button id="tab2" class="tab-btn btn inactive py-2 px-4 text-gray-800 rounded-tl-lg">Profile Results</button>
+    </div>
+    <div class="tab-content mt-4">
+        <!-- Post Results Tab Content -->
+        <div id="tab1-content" class="tab-pane">
+            <h2 class="text-xl font-semibold mb-4">Post Results</h2>
+            <ul>
+                {% if not posts %}
+                    <div class="text-center text-gray-500">
+                        <h2>No posts found</h2>
+                    </div>
+                {% endif %}
+                {% for post in posts %}
+                <div class="feed" id="{{post.pk}}">
+                    <div class="feed-top">
+                        <div class="user">
+                            <div class="profile-picture">
+                                <img src="{{ post.author.profile_picture.url }}" alt="">
+                            </div>
+                            <div class="info">
+                                <h3>{{ post.author.username }}</h3>
+                                <div class="time text-gry">
+                                    <small><span>{{ post.created_on|timesince }} ago</span></small>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="edit">
+                            <img src="{% static 'socialmedia/images/svg/three-dots.svg' %}">
+                        </span>
+                    </div>
+                    <div class="caption">
+                        <div class="title">{{ post.body }}</div>
+                    </div>
+                    <div class="feed-img">
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="{{ post.image.name }}">
+                        {% endif %}
+                    </div>
+                    <div class="video-post">
+                        {% if post.video %}
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <video controls class="embed-responsive-item">
+                                    <source src="{{ post.video.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="action-button">
+                            <div class="interaction-button">
+                                <button  data-post-id="{{ post.pk }}" class="btn btn-primary like-button">
+                                    {% if user in post.likes.all %}
+                                        <i class="fas fa-thumbs-up"> </i>
+                                    {% else %}
+                                        <i class="far fa-thumbs-up"> </i>
+                                    {% endif %}
+                                    <span id="like-count">{{ post.likes.all.count }}</span>
+                                </button>
+                                <button  data-post-id="{{ post.pk }}" class="btn btn-primary dislike-button">
+                                    {% if user in post.dislikes.all %}
+                                        <i class="fas fa-thumbs-down"> </i>
+                                    {% else %}
+                                        <i class="far fa-thumbs-down"> </i>
+                                    {% endif %}
+                                    <span id="dislike-count">{{ post.dislikes.all.count }}</span>
+                                </button>
+                            </div>
+                            <div class="comments">
+                                <button data-post-id="{{post.pk}}" class="btn btn-primary com-btn">
+                                    <i class="far fa-comment-alt"></i>
+                                    <span>Comment</span>
+                                </button>
+                            </div>
+                    </div>
+                    <div class="bookmark">
+                        <i class="fa fa-bookmark"></i>
+                    </div>
+                    <div id="{{ post.pk }}" class="comments-container comments-popup">
+            
+                    </div>
+                </div>
+            
+            
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Profile Results Tab Content -->
+        <div id="tab2-content" class="hidden tab-pane">
+            <h2 class="text-xl font-semibold mb-4">Profile Results</h2>
+            {% if not profiles %}
+                    <div class="text-center text-gray-500">
+                        <h2>No profiles found</h2>
+                    </div>
+                {% endif %}
+                {% for profile in profiles %}
+                <div class="profile" id="{{profile.pk}}">
+                    <div class="profile-top">
+                        <div class="profile-picture">
+                            <img src="{{ profile.profile_picture.url }}" alt="">
+                        </div>
+                        <div class="info" data-username="{{profile.username}}">
+                            <h3 class="font-bold">{{ profile.username }}</h3>
+                            {% if profile.bio %}
+                                <div class="text-gray">
+                                    <small>{{ profile.bio }}</small>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get tab buttons and tab content
+
+        const tab1 = document.getElementById('tab1');
+        const tab2 = document.getElementById('tab2');
+
+        const tab1Content = document.getElementById('tab1-content');
+        const tab2Content = document.getElementById('tab2-content');
+        
+
+        // Add click event listener to each tab button
+        tab1.addEventListener('click', function () {
+            tab1.classList.add('btn-primary');
+            tab2.classList.add('inactive');
+            tab2.classList.remove('btn-primary');
+            tab1.classList.remove('inactive');
+            tab1Content.classList.remove('hidden');
+            tab2Content.classList.add('hidden');
+        });
+
+        tab2.addEventListener('click', function () {
+            tab2.classList.add('btn-primary');
+            tab1.classList.add('inactive');
+            tab1.classList.remove('btn-primary');
+            tab2.classList.remove('inactive');
+            tab2Content.classList.remove('hidden');
+            tab1Content.classList.add('hidden');
+        });
+       });
+
+       //profile accessing
+         const profiles = document.querySelectorAll('.profile');
+            profiles.forEach(profile => {
+                profile.addEventListener('click', function () {
+                    const username = profile.querySelector('.info').getAttribute('data-username');
+                    window.location.href = `/social/profile/${username}`;
+                });
+                });
+</script>
+
+{% endblock %}

@@ -4,34 +4,100 @@
 {% endblock %}
 
 {% block hamburger %}
-    <div class="jumbotron jumbotron-fluid class_jumbotron" style="background-color:rgb(174, 108, 227);">
-        <div class="container">
-        <h1 class="display-4 class_title">{{ classroom.classroom_name }}</h1>
-        <p class="lead class_code">Class code: {{ classroom.class_code }}</p>
-        </div>
-    </div>
-    <input type="hidden" id="assignment_id" name="assignment_id">
-    <div class="contatiner_of_assignments">
-        {% if assignments %}
-            {% for assignment in assignments %}
-                {% for teacher in teachers %}
-                    {% if teacher.teacher_id.id == user.id %}
-                        <a href="{% url 'classrooms:assignment_summary' assignment_id=assignment.id %}">
-                    {% else %}
-                        <a href="#submit_assignment" data-value="{{ assignment.id }}">
-                    {% endif %}
-                {% endfor %}
-                <div class="card assignment_card" style="width: 18rem;">
-                <div class="card-body">
-                <h5 class="card-title">{{assignment.assignment_name}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Assignment posted on {{ assignment.posted_date }}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">Assignment due at {{ assignment.due_time }} on {{ assignment.due_date }}</h6>
-                </div>
-                </div>
-                </a>
-          {% endfor %}
-        {% endif %}
+
+<!-- tailwindcss -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<style>
+  .btn-download {
+    /* Base styles */
+    display: block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    border: 2px solid #6B46C1; /* Purple-700 */
+    background-color: #6B46C1; /* Purple-700 */
+    color: #FFFFFF; /* White */
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-download:hover {
+    /* Hover styles */
+    background-color: #FFFFFF; /* White */
+    color: #6B46C1; /* Purple-700 */
+    border-color: #6B46C1; /* Purple-700 */
+    text-decoration: none;
+}
+
+</style>
+
+<div class="bg-purple-700 text-white py-20">
+  <div class="container mx-auto">
+      <h1 class="text-4xl font-bold">{{ classroom.classroom_name }}</h1>
+      <p class="text-lg">Class code: {{ classroom.class_code }}</p>
+  </div>
+</div>
+
+<div class="container mx-auto mt-10">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="md:col-span-1">
+          <div class="space-y-4">
+              {% if assignments %}
+                  {% for assignment in assignments %}
+                      <a href="{% url 'classrooms:assignment_summary' assignment_id=assignment.id %}" class="block p-4 bg-white rounded-lg shadow-md hover:shadow-xl transition duration-300">
+                          <h2 class="text-xl font-bold">{{ assignment.assignment_name }}</h2>
+                          <p class="text-gray-600">Posted on {{ assignment.posted_date }}</p>
+                          <p class="text-gray-600">Due at {{ assignment.due_time }} on {{ assignment.due_date }}</p>
+                      </a>
+                  {% endfor %}
+              {% endif %}
+          </div>
       </div>
+      <div class="md:col-span-2">
+          <div class="space-y-4">
+              {% for course in content %}
+                  <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl transition duration-300">
+                      <h2 class="text-xl font-bold">{{ course.content_title }}</h2>
+                      <p class="text-gray-600">{{ course.content_description }}</p>
+                      {% if course.content_file %}
+                      <div class="flex" >
+                        <a href="{{ course.content_file.url }}" class="btn-download" download>View</a>
+                      </div>
+                      {% endif %}
+                  </div>
+              {% endfor %}
+          </div>
+      </div>
+  </div>
+</div>
+
+    <!-- modal for add a course -->
+
+    <div class="modal" tabindex="-1" id="add_course">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add Course</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+             <div class="modal-body">
+                  <form method="POST" action="{% url 'classrooms:add_course' classroom.id  %}" class="cclass_form" id="add_course_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input name="content_title" type="text" class="form-control" id="course_name" placeholder="course_name">
+                        <input name="content_description" type="text" class="form-control" id="description" placeholder="description">
+                        <input name="content_file" type="file" class="form-control" id="course_file" placeholder="course_file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add course</button>
+                  </form>
+              </div>
+          </div>
+        </div>
+      </div>
+
 
     <div class="modal" tabindex="-1" id="submit_assignment">
         <div class="modal-dialog">

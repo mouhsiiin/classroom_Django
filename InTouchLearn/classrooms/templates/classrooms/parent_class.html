@@ -10,74 +10,66 @@
     {% block head %}{% endblock %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+   
+   <style>
+    
+.navbar1:hover,
+.navbar1:active {
+  letter-spacing: 5px;
+  font-weight: bold;
+  color:black ;
+}
+   </style> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 </head>
 <body class="container-fluid">
-    <nav class="navbar navbar-expand-lg navbar-light navbar_custom">
-        <nav role="navigation" >
-            <div id="menuToggle"  style="z-index: 6; color:#7f00ff" >
-              <input type="checkbox" style="color:#7f00ff;" />
-              <span></span>
-              <span></span>
-              <span></span>
-              <ul id="menu" style="padding-top: 40px; padding-right: 3px; padding-left: 30px; box-shadow: 1px 1px 2px 1px #888888;">
-                
-                <div style="height: 100vh !important; overflow-y: auto; padding: none !important; margin:0% !important" >
-                {% if mappings %}
-                  <h4 class="hamburger_heading"><b>All Classes</b></h4>
-                  <div class="Overlapped_white"></div>
-                  <br><br><br>
-                    {% for mapping in mappings %}
-                        {% if classroom == mapping.classroom_id %}
-                          <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}"><li class="hamburger_current_class">{{mapping.classroom_id.classroom_name|truncatechars:30 }}</li></a>
-                        {% else %}
-                        <a href="{% url 'classrooms:render_class' id=mapping.classroom_id.id %}"><li class="highlights">{{mapping.classroom_id.classroom_name|truncatechars:30 }}</li></a>
-                        {% endif %}
-                    {% endfor %}                    
-                {% endif %}
-              </div>
-              </ul>
-            </div>
-          </nav>
-        <a class="navbar-brand" href="#" style="font-size:250% !important; color:#7f00ff !important; margin-left: 7%; margin-right: 9%"><b>Classroom</b></a>
+ 
+  <nav class="navbar navbar-expand-lg navbar-light bg-purple-100">
+    <div class="container mx-auto">
+
+        <a class="text-2xl font-bold text-purple-700 hover:no-underline	" href="{% url 'socialmedia:post-list' %}">
+          <div class="flex">
+            <img src="{% static 'socialmedia/images/logo.svg' %}" alt="logo" class="w-10 h-10">
+            <span class="text-2xl font-bold text-purple-700"> Academy</span>
+          </div>
+        </a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              {% for teacher in teachers %}
-              {% if teacher.teacher_id.id == user.id %}
-                <li class="nav-item active">
-                  <a href="{% url 'classrooms:create_assignment' classroom_id=classroom.id %}" type="button"  class="navbar1"  style="text-decoration: none;">Create Assignment</a>
+            <ul class="navbar-nav ml-auto">
+                {% for teacher in teachers %}
+                    {% if teacher.teacher_id.id == user.id %}
+                        <li class="nav-item">
+                            <a href="{% url 'classrooms:create_assignment' classroom_id=classroom.id %}" class="nav-link text-purple-700 hover:text-purple-900" style="text-decoration: none;">Create Assignment</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#add_course" class="nav-link text-purple-700 hover:text-purple-900" style="text-decoration: none;">Add Course</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'classrooms:delete_class' classroom_id=classroom.id %}" class="nav-link text-purple-700 hover:text-purple-900" style="text-decoration: none;">Delete Class</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <li class="nav-item">
+                    <a href="{% url 'classrooms:home' %}" class="nav-link text-purple-700 hover:text-purple-900" style="text-decoration: none;">Home</a>
                 </li>
-                <li class="nav-item active">
-                  <a  class="navbar1"  type="button" href="{% url 'classrooms:delete_class' classroom_id=classroom.id %}" style="text-decoration: none;">Delete Class</a>
-                </li>
-              {% endif %}
-              {% endfor %}
-              <li class="nav-item active">
-                <a  class="navbar1"  type="button" href="{% url 'classrooms:home' %}" style="text-decoration: none;">Home</a>
-              </li>
-              
-              {% for student in students %}
-              {% if student.student_id.id == user.id %}
-              <li class="nav-item">
-                <a class="mybtn myinfo mybtn-active" type="button" href="{% url 'classrooms:unenroll_class' classroom_id=classroom.id %}" style="text-decoration: none;">Unenroll Class</a>
-              </li>
-              {% endif %}
-              {% endfor %}
-              <li class="nav-item active">
-                <a  class="navbar1"  type="button" href="{% url 'logout' %}" style="text-decoration: none;">Logout<span class="sr-only"></span></a>
-              </li>
-              <li class="nav-item active">
-                <div class="image_cropper">
-                  <img src="{{ user.profile_picture.url }}" alt="Profile Pic" class="profile_pic_style">
-                </div>
-              </li>
+                {% for student in students %}
+                    {% if student.student_id.id == user.id %}
+                        <li class="nav-item">
+                            <a href="{% url 'classrooms:unenroll_class' classroom_id=classroom.id %}" class="nav-link text-purple-700 hover:text-purple-900" style="text-decoration: none;">Unenroll Class</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
             </ul>
         </div>
-    </nav>
-    <div>
-
     </div>
-      {% block burger %}
+    <div class="flex items-center">
+        <div class="profile-picture">
+            <img src="{{ user.profile_picture.url }}" alt="Profile Pic" class="w-10 h-10 rounded-full">
+        </div>
+    </div>
+</nav>
+
+
+
+      {% block hamburger %}
       {% endblock %}
 </body>
 <script>
@@ -114,7 +106,7 @@
                     '</div>' +
                 '</div>' 
                 );
-                window.location.href='http://127.0.0.1:8000/classrooms/' + class_id.toString();
+                window.location.href='http://127.0.0.1:8000/class/' + class_id.toString();
                 window.location.reload();
             },
             error : function(xhr,errmsg,err) {
@@ -122,6 +114,28 @@
             }
         });
       });
+
+      $('a[href$="#add_course"]').on( "click", function() {
+        $('#add_course').modal('show');
+      });
+
+      document.addEventListener("DOMContentLoaded", function() {
+        // Get the menu toggle checkbox
+        var menuToggle = document.getElementById("menuToggle");
+
+        // Get the menu
+        var menu = document.getElementById("menu");
+
+        // Add event listener to the checkbox for toggle
+        menuToggle.addEventListener("change", function() {
+            // If checkbox is checked, show the menu; otherwise, hide it
+            if (this.checked) {
+                menu.style.display = "block";
+            } else {
+                menu.style.display = "none";
+            }
+        });
+    });
 
 </script>
 </html>

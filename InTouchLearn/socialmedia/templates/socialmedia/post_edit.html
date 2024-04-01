@@ -2,12 +2,10 @@
 {% load crispy_forms_tags %}
 
 {% block feeds %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-md-3 col-sm-6">
-            <a href="{% url 'post-detail' object.pk %}" class="btn btn-light">Back to Feed</a>
-        </div>
-    </div>
+
     <div class="row justify-content-center mt-5">
         <div class="col-md-5 col-sm-12">
             <h5>Update Your Post</h5>
@@ -15,29 +13,54 @@
     </div>
     <div class="row justify-content-center mt-3 mb-5">
         <div class="col-md-5 col-sm-12">
-            <form method="POST" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 {% csrf_token %}
-                {% for field in form %}
-                <div class="mb-3">
-                    {{ field.label_tag }}
-                    {% if field.widget.is_hidden %}
-                        {{ field }}
-                    {% elif field.widget.input_type == 'textarea' %}
-                        <textarea class="form-control" style="width: 100%;" name="{{ field.name }}" id="{{ field.id_for_label }}">{{ field.value|default:'' }}</textarea>
-                    {% else %}
-                        {{ field }}
-                    {% endif %}
-                    {% if field.help_text %}
-                        <small class="text-muted">{{ field.help_text }}</small>
-                    {% endif %}
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="body">
+                        Body
+                    </label>
+                    <textarea name="body" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="5">{{ post.body }}</textarea>
                 </div>
-            {% endfor %}
-            <button class="btn btn-success mt-3" style="width: 75%;">Submit!</button>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="image">
+                        Image
+                    </label>
+                    <div class="flex items-center justify-center bg-grey-lighter">
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="Current Image" class="w-64 h-64 object-cover rounded-lg shadow-lg">
+                        {% endif %}
+                    </div>
+                    <div class="mt-4 flex items-center">
+                        <label for="image-upload" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg>
+                            <span class="ml-2">Upload Image</span>
+                        </label>
+                        <input id="image-upload" type="file" name="image" class="hidden" accept="image/*">
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-bold mb-2" for="video">
+                        Video
+                    </label>
+                    <div class="flex items-center justify-center bg-grey-lighter">
+                        {% if post.video %}
+                            <video src="{{ post.video.url }}" controls class="w-64 h-64 object-cover rounded-lg shadow-lg"></video>
+                        {% endif %}
+                    </div>
+                    <div class="mt-4 flex items-center">
+                        <label for="video-upload" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg>
+                            <span class="ml-2">Upload Video</span>
+                        </label>
+                        <input id="video-upload" type="file" name="video" class="hidden" accept="video/*">
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Save
+                    </button>
+                </div>
+             </form>
         </div>
-        </div>
-        <div class="d-grid gap-2">
-            
-    </form>
-</div>
-</div>
-{% endblock feeds %}
+    </div>
+    {% endblock feeds %}
