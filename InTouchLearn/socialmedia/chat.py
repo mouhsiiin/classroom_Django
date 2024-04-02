@@ -49,7 +49,11 @@ def create_conversation(request):
                 user2 = User.objects.get(username=user2)
             except User.DoesNotExist:
                 return JsonResponse({'error': 'User not found'}, status=404)
-                
+            
+            if user2 == request.user:
+                return JsonResponse({'error': 'You cannot create a conversation with yourself'}, status=400)
+            if conversation.objects.filter(user1=request.user, user2=user2).exists() or conversation.objects.filter(user1=user2, user2=request.user).exists():
+                return JsonResponse({'error': 'Conversation already exists'}, status=400)    
             new_conversation = conversation(user1=request.user, user2=user2)
             new_conversation.save()
             return JsonResponse({'success': 'Conversation created successfully'})

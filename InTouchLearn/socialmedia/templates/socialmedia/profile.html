@@ -42,6 +42,15 @@
                     <div class="text-center md:text-left">
                         <a href="{% url 'socialmedia:editprofile' %}" class="btn-edit bg-purple-700 text-white px-4 py-2 rounded-md hover:bg-purple-800">Edit profil</a>
                     </div>
+
+                    {% else %}
+                    <div class="text-center md:text-left">
+                        <a href="#creat_cnv" class="btn-edit bg-purple-700 text-white px-4 py-2 rounded-md hover:bg-purple-800">Create Conversation</a>
+                        <div class="server-response">
+                            <!-- server response -->
+
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -125,6 +134,35 @@
 
     {% endfor %}
 
+    <script>
+        // creat a new conversation if is other user profile
+        cnvbtn = document.querySelector('a[href="#creat_cnv"]')
+        response = document.querySelector('.server-response')
+        cnvbtn.addEventListener('click', function(){
+            fetch("{% url 'socialmedia:create_conversation' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    recipient: '{{ curr_profile.username }}'
+                })
+            })
+            .then(response => {
+                if (response.ok){
+                    cnvbtn.innerHTML = 'Conversation created'
+                }
+                else{
+                    response.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        ${response.error}
+                    </div>
+                    `
+                }
+            })
+            
+        });
+    </script>
   
 
     {% endblock %}

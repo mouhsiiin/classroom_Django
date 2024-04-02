@@ -137,7 +137,7 @@
     <!-- ................Start Add Post Popup............ -->
     <div class="popup add-post-popup">
         <div>
-            <form class="popup-box add-post-pop" action="{% url 'socialmedia:post-list' %}" method="post">
+            <form class="popup-box add-post-pop" action="{% url 'socialmedia:post-list' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <h1>Add New Post</h1>
                 <div class="row post-title">
@@ -149,7 +149,7 @@
                         <span><i class="fa fa-add"></i></span>
                         Upload A Picture Or Video
                     </label>
-                    <input name="file" type="file" accept="image/jpg, image/png, image/jpeg" id="feed-pic-upload">
+                    <input name="media" type="file" id="feed-pic-upload">
                     <input type="submit" class="btn btn-primary btn-lg bbb" value="Add Post">
                 </div>
             </form>
