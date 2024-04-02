@@ -87,7 +87,7 @@ ProfileUploader.addEventListener('change', () => {
     const formData = new FormData();
     formData.append('profile_picture', ProfileUploader.files[0]);
     
-    fetch('social/picture_upload', {
+    fetch('/social/picture_upload', {
         method: 'POST',
         headers: {
             'X-CSRFToken': ProfileUploader.dataset.csrf,

@@ -76,6 +76,7 @@ def register(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         role = request.POST.get("role")
+        print(role)
 
         if not username:
             return render(request, "main/register.html", {"error": "Username required."})
@@ -103,9 +104,10 @@ def register(request):
             username=username,
             email=email,
             password=hashed_password,
-        
+            role=role
         )
         new_user.save()
+        print(new_user.role)
 
         token = default_token_generator.make_token(new_user)
         uid = urlsafe_base64_encode(force_bytes(new_user.pk))

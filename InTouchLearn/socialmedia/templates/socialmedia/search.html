@@ -11,7 +11,7 @@
             color: rgb(41, 41, 41) !important;
             border: #6b4de6 2px solid !important; ;
         }
-        .profile {
+        .profile-search {
             display: flex;
             flex-direction: column;
             border: 1px solid #e2e8f0;
@@ -20,14 +20,14 @@
             padding: 1rem;
             margin-bottom: 1rem;
         }
-        .profile:hover {
+        .profile-search:hover {
             cursor: pointer;
         }
         .profile-top {
             display: flex;
             align-items: center;
         }
-        .profile .info {
+        .profile-search .info {
             margin-left: 1rem;
         }
         
@@ -60,7 +60,9 @@
                     <div class="feed-top">
                         <div class="user">
                             <div class="profile-picture">
-                                <img src="{{ post.author.profile_picture.url }}" alt="">
+                                <a href="{% url 'socialmedia:profile' post.author.username %}">
+                                    <img src="{{ post.author.profile_picture.url }}" alt="">
+                                </a>
                             </div>
                             <div class="info">
                                 <h3>{{ post.author.username }}</h3>
@@ -138,7 +140,7 @@
                     </div>
                 {% endif %}
                 {% for profile in profiles %}
-                <div class="profile" id="{{profile.pk}}">
+                <div class="profile-search" id="{{profile.pk}}">
                     <div class="profile-top">
                         <div class="profile-picture">
                             <img src="{{ profile.profile_picture.url }}" alt="">
@@ -190,7 +192,7 @@
        });
 
        //profile accessing
-         const profiles = document.querySelectorAll('.profile');
+         const profiles = document.querySelectorAll('.profile-search');
             profiles.forEach(profile => {
                 profile.addEventListener('click', function () {
                     const username = profile.querySelector('.info').getAttribute('data-username');

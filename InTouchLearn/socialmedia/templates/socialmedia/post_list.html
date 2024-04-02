@@ -9,7 +9,9 @@
         <div class="feed-top">
             <div class="user">
                 <div class="profile-picture">
-                    <img src="{{ post.author.profile_picture.url }}" alt="">
+                    <a href="{% url 'socialmedia:profile' post.author.username %}">
+                        <img src="{{ post.author.profile_picture.url }}" alt="">
+                    </a>
                 </div>
                 <div class="info">
                     <h3>{{ post.author.username }}</h3>
@@ -76,7 +78,6 @@
 
         </div>
     </div>
-
 
     {% endfor %}
     <div id="load-more-container">
