@@ -4,104 +4,158 @@
 
 {% block feeds %}
 
-    {% for post in post_list %}
-    <div class="feed" id="{{post.pk}}">
-        <div class="feed-top">
-            <div class="user">
-                <div class="profile-picture">
-                    <a href="{% url 'socialmedia:profile' post.author.username %}">
-                        <img src="{{ post.author.profile_picture.url }}" alt="">
-                    </a>
-                </div>
-                <div class="info">
-                    <h3>{{ post.author.username }}</h3>
-                    <div class="time text-gry">
-                        <small><span>{{ post.created_on|timesince }} ago</span></small>
-                    </div>
+{% for post in post_list %}
+<div class="feed" id="{{post.pk}}">
+    <div class="feed-top">
+        <div class="user">
+            <div class="profile-picture">
+                <a href="{% url 'socialmedia:profile' post.author.username %}">
+                    <img src="{{ post.author.profile_picture.url }}" alt="">
+                </a>
+            </div>
+            <div class="info">
+                <h3>{{ post.author.username }}</h3>
+                <div class="time text-gry">
+                    <small><span>{{ post.created_on|timesince }} ago</span></small>
                 </div>
             </div>
-            
-            <a href="{% url 'socialmedia:post-detail' post.pk %}" class="pointer">
-                <span class="edit">
-                    <img src="{% static 'socialmedia/images/svg/three-dots.svg' %}">
-                </span>
-            </a>
         </div>
-        <div class="caption">
-            <div class="title">{{ post.body }}</div>
-        </div>
-        <div class="feed-img">
-            {% if post.image %}
-                <img src="{{ post.image.url }}" alt="{{ post.image.name }}">
-            {% endif %}
-        </div>
-        <div class="video-post">
-            {% if post.video %}
-                <div class="embed-responsive embed-responsive-16by9">
-                    <video controls class="embed-responsive-item">
-                        <source src="{{ post.video.url }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            {% endif %}
-        </div>
-        <div class="action-button">
-                <div class="interaction-button">
-                    <button  data-post-id="{{ post.pk }}" class="btn btn-primary like-button">
-                        {% if user in post.likes.all %}
-                            <i class="fas fa-thumbs-up"> </i>
-                        {% else %}
-                            <i class="far fa-thumbs-up"> </i>
-                        {% endif %}
-                        <span id="like-count">{{ post.likes.all.count }}</span>
-                    </button>
-                    <button  data-post-id="{{ post.pk }}" class="btn btn-primary dislike-button">
-                        {% if user in post.dislikes.all %}
-                            <i class="fas fa-thumbs-down"> </i>
-                        {% else %}
-                            <i class="far fa-thumbs-down"> </i>
-                        {% endif %}
-                        <span id="dislike-count">{{ post.dislikes.all.count }}</span>
-                    </button>
-                </div>
-                <div class="comments">
-                    <button data-post-id="{{post.pk}}" class="btn btn-primary com-btn">
-                        <i class="far fa-comment-alt"></i>
-                        <span>Comment</span>
-                    </button>
-                </div>
-        </div>
-        <div class="bookmark">
-            <i class="fa fa-bookmark"></i>
-        </div>
-        <div id="{{ post.pk }}" class="comments-container comments-popup">
 
+        <a href="{% url 'socialmedia:post-detail' post.pk %}" class="pointer">
+            <span class="edit">
+                <img src="{% static 'socialmedia/images/svg/three-dots.svg' %}">
+            </span>
+        </a>
+    </div>
+    <div class="caption">
+        <div class="title">{{ post.body }}</div>
+    </div>
+    <div class="feed-img">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.image.name }}">
+        {% endif %}
+    </div>
+    <div class="video-post">
+        {% if post.video %}
+        <div class="embed-responsive embed-responsive-16by9">
+            <video controls class="embed-responsive-item">
+                <source src="{{ post.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        {% endif %}
+    </div>
+    <div class="action-button">
+        <div class="interaction-button">
+            <button data-post-id="{{ post.pk }}" class="btn btn-primary like-button">
+                {% if user in post.likes.all %}
+                <i class="fas fa-thumbs-up"> </i>
+                {% else %}
+                <i class="far fa-thumbs-up"> </i>
+                {% endif %}
+                <span id="like-count">{{ post.likes.all.count }}</span>
+            </button>
+            <button data-post-id="{{ post.pk }}" class="btn btn-primary dislike-button">
+                {% if user in post.dislikes.all %}
+                <i class="fas fa-thumbs-down"> </i>
+                {% else %}
+                <i class="far fa-thumbs-down"> </i>
+                {% endif %}
+                <span id="dislike-count">{{ post.dislikes.all.count }}</span>
+            </button>
+        </div>
+        <div class="comments">
+            <button data-post-id="{{post.pk}}" class="btn btn-primary com-btn">
+                <i class="far fa-comment-alt"></i>
+                <span>Comment</span>
+            </button>
         </div>
     </div>
+    <div id="{{ post.pk }}" class="comments-container comments-popup">
 
+    </div>
+</div>
+
+{% endfor %}
+
+
+<div id="pagination">
+    {% if page_obj.has_previous %}
+    <button class="page-btn" data-page="{{ page_obj.previous_page_number }}">Previous</button>
+    {% endif %}
+
+    {% for page_num in page_obj.paginator.page_range %}
+    {% if page_num == page_obj.number %}
+    <button class="page-btn active" disabled>{{ page_num }}</button>
+    {% else %}
+    <button class="page-btn" data-page="{{ page_num }}">{{ page_num }}</button>
+    {% endif %}
     {% endfor %}
-    <div id="load-more-container">
-        <button id="load-more-btn">Load More</button>
-    </div>
-    
 
-    
-    
-    
-    <script>
+    {% if page_obj.has_next %}
+    <button class="page-btn" data-page="{{ page_obj.next_page_number }}">Next</button>
+    {% endif %}
+</div>
 
-   
+
+
+
+<script>
+
+
+    const postListContainer = document.getElementById('post-list');
+    const paginationContainer = document.getElementById('pagination');
+
+    // Get the current page number from the template context
+    const currentPageNumber = parseInt('{{ page_number }}');
+
+    // Add click event listener to the pagination buttons
+    paginationContainer.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.classList.contains('page-btn')) {
+            const pageNumber = parseInt(target.dataset.page);
+            fetchPosts(pageNumber);
+        }
+    });
+
+    function fetchPosts(pageNumber) {
+        const url = `?page=${pageNumber}`;
+
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const html = parser.parseFromString(data, 'text/html');
+                const postList = html.getElementById('post-list');
+                const posts = postList.getElementsByTagName('div');
+
+                // Clear the existing post list
+                postListContainer.innerHTML = '';
+
+                // Append the new posts to the post list container
+                for (let post of posts) {
+                    postListContainer.appendChild(post);
+                }
+
+                // Update the pagination buttons
+                paginationContainer.innerHTML = html.getElementById('pagination').innerHTML;
+            })
+            .catch(error => {
+                console.error('Error fetching posts:', error);
+            });
+    }
+
 
     // handel like and dislike post
-    document.addEventListener('DOMContentLoaded', function(){
+    document.addEventListener('DOMContentLoaded', function () {
         const likeBtn = document.querySelectorAll('.like-button');
         const dislikeBtn = document.querySelectorAll('.dislike-button');
         const commentBtn = document.querySelectorAll('.com-btn');
-        
 
-        
+
+
         likeBtn.forEach(btn => {
-            btn.addEventListener('click', function(){
+            btn.addEventListener('click', function () {
                 const postId = btn.getAttribute('data-post-id');
                 console.log(postId);
 
@@ -109,27 +163,29 @@
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'}})
-                .then(response => {
-                    if (response.ok){
-                        return response.json();
+                        'Content-Type': 'application/json'
                     }
                 })
-                .then(data => {
-                    console.log(data);
-                   if (data.liked){
-                       btn.innerHTML = `<i class="fas fa-thumbs-up"></i><span id="like-count">${data.like_count}</span>`;
-                   } else {
-                       btn.innerHTML = `<i class="far fa-thumbs-up"></i><span id="like-count">${data.like_count}</span>`;
-                   }
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        console.log(data);
+                        if (data.liked) {
+                            btn.innerHTML = `<i class="fas fa-thumbs-up"></i><span id="like-count">${data.like_count}</span>`;
+                        } else {
+                            btn.innerHTML = `<i class="far fa-thumbs-up"></i><span id="like-count">${data.like_count}</span>`;
+                        }
 
-                });
-                
+                    });
+
             });
         });
 
         dislikeBtn.forEach(btn => {
-            btn.addEventListener('click', function(){
+            btn.addEventListener('click', function () {
                 const postId = btn.getAttribute('data-post-id');
                 console.log(postId);
 
@@ -137,73 +193,43 @@
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'}})
-                .then(response => {
-                    if (response.ok){
-                        return response.json();
+                        'Content-Type': 'application/json'
                     }
                 })
-                .then(data => {
-                    console.log(data);
-                   if (data.disliked){
-                       btn.innerHTML = `<i class="fas fa-thumbs-down"></i><span id="dislike-count">${data.dislike_count}</span>`;
-                   } else {
-                       btn.innerHTML = `<i class="far fa-thumbs-down"></i><span id="dislike-count">${data.dislike_count}</span>`;
-                   }
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        console.log(data);
+                        if (data.disliked) {
+                            btn.innerHTML = `<i class="fas fa-thumbs-down"></i><span id="dislike-count">${data.dislike_count}</span>`;
+                        } else {
+                            btn.innerHTML = `<i class="far fa-thumbs-down"></i><span id="dislike-count">${data.dislike_count}</span>`;
+                        }
 
-                });
-                
+                    });
+
             });
         });
 
         commentBtn.forEach(btn => {
-            btn.addEventListener('click', function(){
+            btn.addEventListener('click', function () {
                 console.log(btn)
                 const postId = btn.getAttribute('data-post-id');
                 console.log(postId);
-    
-                fetch(`/social/post/${postId}/comments`, {
-                    method: 'GET',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'Content-Type': 'application/json'}})
-                .then(data =>{
-                    console.log(data);
-                    for (let i = 0; i < data.length; i++){
-                        console.log(data[i].body);
-                    }
 
-                    const commentsContainer = document.querySelector(`.comments-container`);
-                    commentsContainer.innerHTML = '';
-                    data.forEach(comment => {
-                        const commentDiv = document.createElement('div');
-                        commentDiv.innerHTML = `
-                        <div class="comment">
-                            <div class="user">
-                                <div class="profile-picture">
-                                    <img src="${comment.author.profile_picture}" alt="">
-                                </div>
-                                <div class="info">
-                                    <h3>${comment.author.username}</h3>
-                                    <div class="time text-gry">
-                                        <small><span>${comment.created_on}</span></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="caption">
-                                <div class="title">${comment.body}</div>
-                            </div>
-                        </div>
-                        `;
-                        commentsContainer.appendChild(commentDiv);
-                    });
-                });
-                
+                window.location.href = `/social/post/${postId}`;
+
+
+
             });
         });
-        //display comments as a dropdown
 
-    });    
+    });
+
+
 
 
 

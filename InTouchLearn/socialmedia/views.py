@@ -33,6 +33,7 @@ def editprofile(request):
         last_name = request.POST.get('last_name')
         bio = request.POST.get('bio')
         profile_picture = request.FILES.get('profile_picture')
+        resume = request.FILES.get('resume')
 
         if username:
             user.username = username
@@ -44,6 +45,8 @@ def editprofile(request):
             user.bio = bio
         if profile_picture:
             user.profile_picture = profile_picture
+        if resume:
+            user.resume = resume
 
         user.save()
         return redirect('socialmedia:profile', username=user.username)
@@ -51,7 +54,16 @@ def editprofile(request):
         return render(request, 'socialmedia/editprofile.html')
         
 def landing(request):
-    return render(request, 'socialmedia/landing.html')
+    students_counts = User.objects.filter(role='student').count()
+    teachers_counts = User.objects.filter(role='teacher').count()
+    posts_counts = Post.objects.all().count()
+
+    context = {
+        'students_counts': students_counts,
+        'teachers_counts': teachers_counts,
+        'posts_counts': posts_counts,
+    }
+    return render(request, 'socialmedia/landing.html', context)
 
 
 
@@ -78,9 +90,24 @@ def profile(request, username):
 @login_required
 def post_list_view(request):
     posts = Post.objects.all().order_by('-created_on')
-    paginator = Paginator(posts, 3)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    paginator = Paginator(posts, 15)  # Set the number of posts per page
+
+    page_number = request.GET.get('page', 1)  # Get the current page number, default to 1
+
+    try:
+        page_obj = paginator.page(page_number)
+    except:
+        pass
+    # except PageNotAnInteger:
+    #     page_obj = paginator.page(1)
+    # except EmptyPage:
+    #     page_obj = paginator.page(paginator.num_pages)
+
+    pages = {
+        'page_obj': page_obj,
+        'page_number': page_number,
+        'num_pages': paginator.num_pages,  # Add the total number of pages
+    }
 
 
     if request.method == 'POST':
@@ -121,8 +148,8 @@ def post_list_view(request):
     context = {
         'post_list': page_obj,
         'user': userInformation,
-        'page_obj': page_obj
-    }
+        'pages': pages,
+        }
     return render(request, 'socialmedia/post_list.html', context)
 
 

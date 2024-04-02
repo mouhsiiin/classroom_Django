@@ -1,242 +1,35 @@
-{% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     {% load static %}
-
     <link rel="icon" href="{% static 'socialmedia/images/logo.svg' %}">
-
-  <style>/* Import Google font - Poppins */
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-    
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-    }
-    
-    body {
-        min-height: 100vh;
-        width: 100%;
-        background: #6d0095;
-    }
-    
-    .container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-width: 430px;
-        width: 100%;
-        background: #fff;
-        border-radius: 7px;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* .container .registration{
-      display: none;
-    }
-    #check:checked ~ .registration{
-      display: block;
-    }
-    #check:checked ~ .login{
-      display: none;
-    }
-    #check{
-      display: none;
-    } */
-    .container .form {
-        padding: 2rem;
-    }
-    
-    .form header {
-        font-size: 2rem;
-        font-weight: 500;
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
-    
-    .form input {
-        height: 60px;
-        width: 100%;
-        padding: 0 15px;
-        font-size: 17px;
-        margin-bottom: 1.3rem;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        outline: none;
-    }
-    
-    .form input:focus {
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-    }
-    
-    .form a {
-        font-size: 16px;
-        color: #480095;
-        text-decoration: none;
-    }
-    
-    .form a:hover {
-        text-decoration: underline;
-    }
-    
-    .form input.button {
-        color: #fff;
-        background: #570095;
-        font-size: 1.2rem;
-        font-weight: 500;
-        letter-spacing: 1px;
-        margin-top: 1.7rem;
-        cursor: pointer;
-        transition: 0.4s;
-    }
-    
-    .form input.button:hover {
-        background: #006653;
-    }
-    
-    .signup {
-        font-size: 17px;
-        text-align: center;
-    }
-    
-    .signup label {
-        color: #009579;
-        cursor: pointer;
-    }
-    
-    .signup label:hover {
-        text-decoration: underline;
-    }
-    
-    /* Center the div with class name 'intro'
-        and set the width to 100% */
-    .intro {
-        margin: auto;
-        width: 100%;
-        padding: 10px;
-    }
-    
-    /* Set the background color to green
-        and the text color to white */
-    .intro {
-        color: white;
-    }
-    
-    /* Make the text inside the div with class name intro look bold and attractive */
-    .intro h1 {
-        font-size: 50px;
-        font-weight: bold;
-        text-align: center;
-    }
-    
-    /* center the h2 tag inside the div with class name intro */
-    .intro h2 {
-        text-align: center;
-    }
-    
-    /* vertically align the div with class name intro to the center of the page */
-    .intro {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    
-    /* make the buttons inside the div with class name intro look attractive */
-    .intro a {
-        background-color: #984caf;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        
-    }
-    
-    /* center the buttons inside the div with class name intro */
-    .intro a {
-        margin-top: 7px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 50%;
-    }
-    
-    /* make the buttons inside the div with class name intro look attractive when hovered */
-    .intro a:hover {
-        background-color: #8045a0;
-    }
-    
-    /* center the div named dashboard */
-    .dashboard {
-        margin: auto;
-        width: 100%;
-        padding: 10px;
-        color: white;
-    }
-    
-    /** align the text inside the div named dashboard to the center */
-    .dashboard h1 {
-        font-size: 50px;
-        font-weight: bold;
-        text-align: center;
-    }
-    
-    .dashboard a {
-        background-color: #914caf;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-    
-    .dashboard a {
-        margin-top: 7px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 50%;
-        border-radius: 10px;
-    }
-    
-    .dashboard a:hover {
-        background-color: #8345a0;
-        border-radius: 10px;
-    }
-    
-    .dashboard {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }</style>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Video Conference</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <body>
-    <div class="dashboard">
-        <h1>Welcome {{name}}!</h1>
-        <!-- create a "New Meeting" button -->
-        <a href="{% url 'classrooms:meeting' %}" class="button">New Meeting</a>
-        <a href="{% url 'classrooms:join_room' %}" class="button">Join Meeting</a>
-        <a href="{% url 'classrooms:home' %}" class="button">Classroom</a>
- 
-    </div>
-  </body>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Video Conference</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+<body class="h-full bg-gray-100 flex items-center justify-center">
+    <div class="dashboard bg-white p-12 rounded-lg shadow-2xl max-w-4xl">
+        <div class="flex items-center mb-8">
+            <img src="{% static 'socialmedia/images/logo.svg' %}" alt="Logo" class="w-16 h-16 mr-4">
+            <h1 class="text-5xl font-bold">Welcome {{name}}!</h1>
+        </div>
+        <div class="grid grid-cols-3 gap-8">
+            <a href="{% url 'classrooms:meeting' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center flex-col">
+                <i class="fas fa-video fa-3x mb-2"></i>
+                <span>New Meeting</span>
+            </a>
+            <a href="{% url 'classrooms:join_room' %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center flex-col">
+                <i class="fas fa-sign-in-alt fa-3x mb-2"></i>
+                <span>Join Meeting</span>
+            </a>
+            <a href="{% url 'classrooms:home' %}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center flex-col">
+                <i class="fas fa-chalkboard-teacher fa-3x mb-2"></i>
+                <span>Classroom</span>
+            </a>
+        </div>
+    </div>
+</body>
 </html>

@@ -12,6 +12,7 @@ class User(AbstractUser):
     is_email_verified = models.BooleanField(default=False)
     profile_picture = models.ImageField(upload_to='uploads/profile_pictures', blank=True, null=True, default='uploads/profile_pictures/default.jpg')
     bio = models.TextField(blank=True, null=True)
+    resume = models.FileField(upload_to='uploads/resumes', blank=True, null=True)
 
 
     def __str__(self):

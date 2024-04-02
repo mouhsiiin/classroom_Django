@@ -3,6 +3,8 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block feeds %}
+<!-- tailwind -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <div class="container">
     <div class="row justify-content-center mt-3">
         <div class="col-md-5 col-sm-12 border-bottom">
@@ -64,12 +66,6 @@
                             <span id="dislike-count">{{ post.dislikes.all.count }}</span>
                         </button>
                     </div>
-                    <div class="comments">
-                        <button data-post-id="{{post.pk}}" class="btn btn-primary com-btn">
-                            <i class="far fa-comment-alt"></i>
-                            <span>Comment</span>
-                        </button>
-                    </div>
                 </div>
                 <div class="bookmark">
                     <i class="fa fa-bookmark"></i>
@@ -77,6 +73,26 @@
             </div>
         </div>
     </div>
+    <div class="comments space-y-4">
+        {% for comment in comments %}
+          <div class="comment bg-white rounded-lg shadow-md p-4">
+            <div class="user flex items-center">
+              <div class="profile-picture mr-3">
+                <img class="rounded-full w-10 h-10" src="{{ comment.author.profile_picture.url }}" alt="">
+              </div>
+              <div class="info">
+                <h3 class="text-lg font-semibold">{{ comment.author.username }}</h3>
+                <div class="time text-gray-500 text-sm">
+                  <small><span>{{ comment.created_on|timesince }} ago</span></small>
+                </div>
+              </div>
+            </div>
+            <div class="caption mt-2">
+              <div class="title text-gray-700">{{ comment.comment }}</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     <div class="row justify-content-center mt-3 mb-5">
         <div class="col-md-5 col-sm-12">
             <form method="POST">
