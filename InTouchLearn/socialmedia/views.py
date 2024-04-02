@@ -89,8 +89,9 @@ def post_list_view(request):
         print("===>>", text)
         if text:
             new_post = Post(body=text, author=request.user)
-            if request.FILES:
-                file = request.FILES.get('file')
+            if request.FILES.get('media'):
+                file = request.FILES.get('media')
+                print("===>>", file.content_type)
                 #check if the file is an image
                 if file.content_type.startswith('image'):
                     new_post.image = file
@@ -176,7 +177,7 @@ def post_delete_view(request, pk):
 
     if request.method == 'POST':
         post.delete()
-        return redirect('post-list')
+        return redirect('socialmedia:post-list')
 
     context = {
         'post': post,
