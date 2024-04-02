@@ -56,18 +56,22 @@ def landing(request):
 
 
 def profile(request, username):
-    user = get_object_or_404(User, username=username)
+    target_user = get_object_or_404(User, username=username)
     userInformation = {
-        "username": user.username,
-        "email": user.email,
-        "first_name": user.first_name,
-        "last_name": user.last_name,
-        "bio": user.bio,
-        "profile_picture": user.profile_picture
+        "username": target_user.username,
+        "email": target_user.email,
+        "role": target_user.role,
+        "first_name": target_user.first_name,
+        "last_name": target_user.last_name,
+        "bio": target_user.bio,
+        "profile_picture": target_user.profile_picture
     }
 
+    posts = Post.objects.filter(author=target_user).order_by('-created_on')
+
     context = {
-        'profile': userInformation,
+        'curr_profile': userInformation,
+        'post_list': posts,
     }
     return render(request, 'socialmedia/profile.html', context)
 
@@ -107,6 +111,7 @@ def post_list_view(request):
     userInformation = {
         "username": user.username,
         "email": user.email,
+        "role": user.role,
         "first_name": user.first_name,
         "last_name": user.last_name,
         "bio": user.bio,
